@@ -8,20 +8,6 @@
 
 import Foundation
 
-//enum APIKeyError: LocalizedError {
-//	case ApiKeysPlistNotFound
-//	case KeyNotFound
-//	case PlistTypeMismatch
-//
-//	var errorDescription: String? {
-//		switch self {
-//		case .ApiKeysPlistNotFound: return "ApiKey.plist file not found."
-//		case .KeyNotFound: return "Key not found"
-//		case .PlistTypeMismatch: return "Dictionary value type mismatch, should be String"
-//		}
-//	}
-//}
-
 enum APIKeyError: String, LocalizedError {
 	case ApiKeysPlistNotFound = "ApiKey.plist file not found."
 	case KeyNotFound = "Key not found"
