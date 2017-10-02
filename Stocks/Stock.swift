@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Stock: NSObject, NSCoding {
+class Stock: Codable {
 	// MARK: - Properties
 	let symbol: String
 	let name: String
@@ -19,9 +19,24 @@ class Stock: NSObject, NSCoding {
 	typealias JsonObject = [String: Any]
 	
 	// MARK: - Archiving Paths
-	static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-	static let ArchiveURL = DocumentsDirectory.appendingPathComponent("stocks")
-	
+    static let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let archiveURL = documentsDirectory.appendingPathComponent("stocks").appendingPathExtension("plist")
+    
+    // MARK: - Codable
+    
+    enum CodingKeys: String, CodingKey {
+        case symbol
+        case name
+        case stockExchange
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        symbol = try values.decode(String.self, forKey: .symbol)
+        name = try values.decode(String.self, forKey: .name)
+        stockExchange = try values.decode(String.self, forKey: .stockExchange)
+    }
+
 	// MARK: - Init
 	init(symbol: String, name: String, stockExchange: String) {
 		self.name = name
@@ -41,27 +56,8 @@ class Stock: NSObject, NSCoding {
 		self.init(symbol: symbol, name: name, stockExchange: stockExchange)
 	}
 	
-	// MARK: - NSCoding
-	func encode(with aCoder: NSCoder) {
-		aCoder.encode(symbol, forKey: "symbol")
-		aCoder.encode(name, forKey: "name")
-		aCoder.encode(stockExchange, forKey: "stockExchange")
-	}
-	
-	required convenience init?(coder aDecoder: NSCoder) {
-		guard
-			let symbol = aDecoder.decodeObject(forKey: "symbol") as? String,
-			let name = aDecoder.decodeObject(forKey: "name") as? String,
-			let stockExchange = aDecoder.decodeObject(forKey: "stockExchange") as? String
-		else {
-			return nil
-		}
-		
-		self.init(symbol: symbol, name: name, stockExchange: stockExchange)
-	}
-	
 	// MARK: - Rates
-	class Rates {
+    class Rates {
 		var lastUpdate: Date?
 		var latestPrice: Double?
 		var priceChange: Double?

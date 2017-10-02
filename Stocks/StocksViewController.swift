@@ -41,11 +41,23 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 	}
 	
 	private func saveStocks() {
-		NSKeyedArchiver.archiveRootObject(stocks, toFile: Stock.ArchiveURL.path)
+        let propertyListEncoder = PropertyListEncoder()
+        let encodedStocks = try? propertyListEncoder.encode(stocks)
+        
+        try? encodedStocks?.write(to: Stock.archiveURL, options: .noFileProtection)
 	}
 	
 	private func loadStocks() -> [Stock]? {
-		return NSKeyedUnarchiver.unarchiveObject(withFile: Stock.ArchiveURL.path) as? [Stock]
+        let propertyListDecoder = PropertyListDecoder()
+        
+        if let retrievedStocksData = try? Data(contentsOf: Stock.archiveURL),
+            let decodedStocks = try? propertyListDecoder.decode([Stock].self, from: retrievedStocksData)
+        {
+            return decodedStocks
+        }
+        else {
+            return nil
+        }
 	}
 	
 	private func refreshStocks(handler: (()->())? = nil) {
