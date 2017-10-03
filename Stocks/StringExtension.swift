@@ -24,11 +24,11 @@ extension String {
 
 	init?(doubleRepresentingPercentageToFormatedString: Double?) {
 		let formatter = NumberFormatter()
-		formatter.numberStyle = .decimal
+		formatter.numberStyle = .percent
 		formatter.maximumFractionDigits = 2
 		
-		if let value = doubleRepresentingPercentageToFormatedString, let string = formatter.string(from: NSNumber(value: value*100)) {
-			self.init(string+"%")
+		if let value = doubleRepresentingPercentageToFormatedString, let string = formatter.string(from: NSNumber(value: value)) {
+			self.init(string)
 		}
 		else {
 			return nil
