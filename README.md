@@ -6,6 +6,14 @@ This is my first iOS app, it’s a clone of the Stocks app by Apple. It’s just
 [![Screenshot](Readme_Assets/example3-thumb.png)](Readme_Assets/example3.png)
 [![Screenshot](Readme_Assets/example4-thumb.png)](Readme_Assets/example4.png)
 
+## Improvement ideas
+
+- Add localization support.
+- Add testing using XCTest.
+- Add today widget.
+- Support landscape orientation and iPads (using size classes).
+- Add charts.
+
 ## Requirements
 - iOS 10.0+
 - Xcode 9.0+
