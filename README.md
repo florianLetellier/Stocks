@@ -8,7 +8,6 @@ This is my first iOS app, it’s a clone of the Stocks app by Apple. It’s just
 
 ## Improvement ideas
 
-- Add localization support.
 - Add testing using XCTest.
 - Add today widget.
 - Support landscape orientation and iPads (using size classes).

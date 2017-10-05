@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  Stocks
+
+  Created by Marcell Bostyai on 2017. 10. 05..
+  Copyright © 2017. Marcell Bostyai. All rights reserved.
+*/
+
+"Last updated: %@" = "Last updated: %@";

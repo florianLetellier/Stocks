@@ -1,0 +1,96 @@
+
+/* Class = "UILabel"; text = "—"; ObjectID = "0Fz-lY-jIK"; */
+"0Fz-lY-jIK.text" = "—";
+
+/* Class = "UILabel"; text = "LOW"; ObjectID = "0NU-60-UXc"; */
+"0NU-60-UXc.text" = "ALACSONY";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "1Yn-dV-6be"; */
+"1Yn-dV-6be.text" = "—";
+
+/* Class = "UILabel"; text = "YEAR HIGH"; ObjectID = "6Xl-Hf-Ug9"; */
+"6Xl-Hf-Ug9.text" = "ÉVI. MAX";
+
+/* Class = "UILabel"; text = "YIELD"; ObjectID = "6vI-9J-4YE"; */
+"6vI-9J-4YE.text" = "HOZAM";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "6zy-Dt-YjP"; */
+"6zy-Dt-YjP.text" = "Subtitle";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "7AW-WX-BEO"; */
+"7AW-WX-BEO.text" = "—";
+
+/* Class = "UINavigationItem"; title = "Stocks"; ObjectID = "7Di-ae-nAO"; */
+"7Di-ae-nAO.title" = "Részvények";
+
+/* Class = "UILabel"; text = "Company"; ObjectID = "7Sr-jq-UQZ"; */
+"7Sr-jq-UQZ.text" = "Company";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "9EE-mM-yPT"; */
+"9EE-mM-yPT.text" = "Subtitle";
+
+/* Class = "UILabel"; text = "AVG VOL"; ObjectID = "E1j-dW-9Jf"; */
+"E1j-dW-9Jf.text" = "ÁTL. FORG.";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "GSK-5l-tZ9"; */
+"GSK-5l-tZ9.text" = "—";
+
+/* Class = "UILabel"; text = "Type a company name or stock symbol."; ObjectID = "KH2-2X-PdH"; */
+"KH2-2X-PdH.text" = "Adjon meg egy cégnevet vagy részvényt.";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "Kyu-65-bAb"; */
+"Kyu-65-bAb.text" = "—";
+
+/* Class = "UILabel"; text = "Price"; ObjectID = "L52-4O-890"; */
+"L52-4O-890.text" = "Price";
+
+/* Class = "UIButton"; normalTitle = "—"; ObjectID = "Mje-UI-x4x"; */
+"Mje-UI-x4x.normalTitle" = "—";
+
+/* Class = "UILabel"; text = "P/E"; ObjectID = "Rx3-5h-AGs"; */
+"Rx3-5h-AGs.text" = "P/E";
+
+/* Class = "UILabel"; text = "YEAR LOW"; ObjectID = "WKf-ri-ae0"; */
+"WKf-ri-ae0.text" = "ÉVI MIN.";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "ZsB-dq-K9d"; */
+"ZsB-dq-K9d.text" = "Title";
+
+/* Class = "UILabel"; text = "HIGH"; ObjectID = "aNm-vN-L6k"; */
+"aNm-vN-L6k.text" = "MAGAS";
+
+/* Class = "UILabel"; text = "SYMBOL"; ObjectID = "hlv-dh-2QB"; */
+"hlv-dh-2QB.text" = "SYMBOL";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "mcc-Yc-IHv"; */
+"mcc-Yc-IHv.text" = "—";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "njN-Zn-Qx0"; */
+"njN-Zn-Qx0.text" = "—";
+
+/* Class = "UILabel"; text = "No related articles found."; ObjectID = "qKX-IR-anC"; */
+"qKX-IR-anC.text" = "Nem találhatóak kapcsolódó hírek.";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "rGt-p3-qS5"; */
+"rGt-p3-qS5.text" = "—";
+
+/* Class = "UILabel"; text = "VOL"; ObjectID = "rL8-w0-uHc"; */
+"rL8-w0-uHc.text" = "FORG.";
+
+/* Class = "UILabel"; text = "MKT CAP"; ObjectID = "u43-zM-LCC"; */
+"u43-zM-LCC.text" = "PIACTŐKE";
+
+/* Class = "UILabel"; text = "OPEN"; ObjectID = "uPb-YK-JrI"; */
+"uPb-YK-JrI.text" = "NYITÓÁR";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "vpy-ol-mA9"; */
+"vpy-ol-mA9.text" = "—";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "wlG-jN-rWk"; */
+"wlG-jN-rWk.text" = "Title";
+
+/* Class = "UILabel"; text = "—"; ObjectID = "yhs-tP-ac7"; */
+"yhs-tP-ac7.text" = "—";
+
+/* Class = "UILabel"; text = "Last Update"; ObjectID = "zPo-R5-4pD"; */
+"zPo-R5-4pD.text" = "Last Update";

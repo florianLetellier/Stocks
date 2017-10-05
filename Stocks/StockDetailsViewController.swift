@@ -55,7 +55,10 @@ class StockDetailsViewController: UIViewController {
 			formater.dateStyle = .short
 			formater.timeStyle = .short
 			
-			lastRefreshFootnoteLabel?.text = "Last updated: \(formater.string(from: lastRefresh))"
+            lastRefreshFootnoteLabel?.text = String.localizedStringWithFormat(
+                NSLocalizedString("Last updated: %@", comment: ""),
+                formater.string(from: lastRefresh)
+            )
 		}
 		else {
 			lastRefreshFootnoteLabel?.text = " "
