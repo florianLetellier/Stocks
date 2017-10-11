@@ -1,10 +1,10 @@
 # Stocks
 This is my first iOS app, it’s a clone of the Stocks app by Apple. It’s just a learning project.
 
-[![Screenshot](Readme_Assets/example1-thumb.png)](Readme_Assets/example1.png)
-[![Screenshot](Readme_Assets/example2-thumb.png)](Readme_Assets/example2.png)
-[![Screenshot](Readme_Assets/example3-thumb.png)](Readme_Assets/example3.png)
-[![Screenshot](Readme_Assets/example4-thumb.png)](Readme_Assets/example4.png)
+<a href="Readme_Assets/example1.png"><img src="Readme_Assets/example1-thumb.png" alt="Screenshot" height="300"></a>
+<a href="Readme_Assets/example2.png"><img src="Readme_Assets/example2-thumb.png" alt="Screenshot" height="300"></a>
+<a href="Readme_Assets/example3.png"><img src="Readme_Assets/example3-thumb.png" alt="Screenshot" height="300"></a>
+<a href="Readme_Assets/example4.png"><img src="Readme_Assets/example4-thumb.png" alt="Screenshot" height="300"></a>
 
 ## Improvement ideas
 
