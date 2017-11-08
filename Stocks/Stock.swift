@@ -57,112 +57,71 @@ class Stock: Codable {
 	}
 	
 	// MARK: - Rates
-    class Rates {
+    class Rates: Decodable {
 		var lastUpdate: Date?
 		var latestPrice: Double?
 		var priceChange: Double?
 		var priceChangePercentage: Double?
 		var open: Double?
-		var daysHigh: Double?
-		var daysLow: Double?
 		var volume: Double?
 		var peRatio: Double?
-		var marketCapitalization: String?
+		var marketCapitalization: Double?
 		var yearHigh: Double?
 		var yearLow: Double?
-		var averageDailyVolume: Double?
-		var dividendYield: Double?
-		
-		init?(json: JsonObject) {
-			guard
-				let contatinerJSON = json["query"] as? JsonObject,
-				let contatinerJSONresults = contatinerJSON["results"] as? JsonObject,
-				let contatinerJSONquote = contatinerJSONresults["quote"] as? JsonObject
-				else {
-					return nil
-			}
-			
-			let latestPrice				= contatinerJSONquote["LastTradePriceOnly"] as? String ?? ""
-			let priceChange				= contatinerJSONquote["Change"] as? String ?? ""
-			let priceChangePercentage	= contatinerJSONquote["PercentChange"] as? String ?? ""
-			let open					= contatinerJSONquote["Open"] as? String ?? ""
-			let daysHigh				= contatinerJSONquote["DaysHigh"] as? String ?? ""
-			let daysLow					= contatinerJSONquote["DaysLow"] as? String ?? ""
-			let volume					= contatinerJSONquote["Volume"] as? String ?? ""
-			let peRatio					= contatinerJSONquote["PERatio"] as? String ?? ""
-			let marketCapitalization	= contatinerJSONquote["MarketCapitalization"] as? String
-			let yearHigh				= contatinerJSONquote["YearHigh"] as? String ?? ""
-			let yearLow					= contatinerJSONquote["YearLow"] as? String ?? ""
-			let averageDailyVolume		= contatinerJSONquote["AverageDailyVolume"] as? String ?? ""
-			let dividendYield			= contatinerJSONquote["DividendYield"] as? String ?? ""
-			
-			// YAHOO API returns percentage values as formated strings e.g., +30.1%
-			func convertPercentageStringToDoblue(_ value: String) -> Double? {
-				let withoutPlusSign = value.replacingOccurrences(of: "+", with: "")
-				let withoutPlusOrPercentageSign = withoutPlusSign.replacingOccurrences(of: "%", with: "")
-				
-				if let convertedValue = Double(withoutPlusOrPercentageSign) {
-					return convertedValue/100
-				}
-				else {
-					return nil
-				}
-			}
-			
-			self.priceChangePercentage = convertPercentageStringToDoblue(priceChangePercentage)
-			self.dividendYield = convertPercentageStringToDoblue(dividendYield)
-			self.latestPrice = Double(latestPrice)
-			self.priceChange = Double(priceChange)
-			self.open = Double(open)
-			self.daysHigh = Double(daysHigh)
-			self.daysLow = Double(daysLow)
-			self.volume = Double(volume)
-			self.peRatio = Double(peRatio)
-			self.marketCapitalization = marketCapitalization
-			self.yearHigh = Double(yearHigh)
-			self.yearLow = Double(yearLow)
-			self.averageDailyVolume = Double(averageDailyVolume)
-			self.lastUpdate = Date()
-		}
+		var avgTotalVolume: Double?
+        var ytdChange: Double?
+        
+        enum CodingKeys: String, CodingKey {
+            case lastUpdate = "latestUpdate"
+            case latestPrice
+            case priceChange = "change"
+            case priceChangePercentage = "changePercent"
+            case open
+            case volume = "latestVolume"
+            case peRatio
+            case marketCapitalization = "marketCap"
+            case yearHigh = "week52High"
+            case yearLow = "week52Low"
+            case avgTotalVolume
+            case ytdChange
+        }
 	}
 	
 	// MARK: - Instance methods
 	func refreshPrices(completionHandler: @escaping () -> ()) {
 		dataTask?.cancel()
 		
-		// Building URL for JSON query
-		let baseURL = "https://query.yahooapis.com"
-		
-		var stockURL = URLComponents(string: baseURL)
-		stockURL?.path = "/v1/public/yql"
-		stockURL?.queryItems = [
-			URLQueryItem(name: "q", value: "select * from yahoo.finance.quotes where symbol=\"\(self.symbol)\""),
-			URLQueryItem(name: "format", value: "json"),
-			URLQueryItem(name: "env", value: "store://datatables.org/alltableswithkeys")
-		]
-		
-		// Fetch JSON from URL
-		if let url = stockURL?.url {
-			let request = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData)
-			
-			dataTask = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
-				DispatchQueue.main.async {
-					if let error = error {
-						print("Error: \(error.localizedDescription)")
-					}
-					else if let data = data {
-						if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? JsonObject, json != nil {
-							self?.rates = Rates(json: json!)
-						}
-					}
-					completionHandler()
-				}
-			}
-			
-			dataTask?.resume()
-		}
-		else {
-			completionHandler()
-		}
+        let stockURL: URL! = {
+            var url = URL(string: "https://api.iextrading.com/")
+            
+            url?.appendPathComponent("1.0")
+            url?.appendPathComponent("stock")
+            url?.appendPathComponent(self.symbol)
+            url?.appendPathComponent("quote")
+            
+            return url
+        }()
+
+        dataTask = URLSession.shared.dataTask(with: stockURL) { [weak self] (data, response, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                }
+                else if let data = data {
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .millisecondsSince1970
+                    
+                    do {
+                        self?.rates = try decoder.decode(Stock.Rates.self, from: data)
+                    }
+                    catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                completionHandler()
+            }
+        }
+        
+        dataTask?.resume()
 	}
 }

@@ -86,7 +86,9 @@ class YourStocksTableViewCell: UITableViewCell {
 		// Set button text for state
 		switch state {
 		case .marketCapitalization:
-			changeButton.setTitle(stock?.rates?.marketCapitalization ?? "—", for: .normal)
+			changeButton.setTitle(
+                String(doubleToAbbreviatedString: stock?.rates?.marketCapitalization, maximumDigits: 4) ?? "—", for: .normal
+            )
 		case .priceChange:
 			changeButton.setTitle(String(doubleToFormatedString: stock?.rates?.priceChange) ?? "—", for: .normal)
 		case .priceChangePercentage:

@@ -25,15 +25,13 @@ class StockDetailsViewController: UIViewController {
 	// Stock price subviews outlets
 	@IBOutlet weak var companyNameLabel: UILabel!
 	@IBOutlet weak var openLabel: UILabel!
-	@IBOutlet weak var highLabel: UILabel!
-	@IBOutlet weak var lowLabel: UILabel!
 	@IBOutlet weak var volLabel: UILabel!
 	@IBOutlet weak var peLabel: UILabel!
 	@IBOutlet weak var mktCapLabel: UILabel!
 	@IBOutlet weak var yearHighLabel: UILabel!
 	@IBOutlet weak var yearLowLabel: UILabel!
 	@IBOutlet weak var avgVolLabel: UILabel!
-	@IBOutlet weak var yieldLabel: UILabel!
+	@IBOutlet weak var ytdChange: UILabel!
 	
 	// Articles subview
 	private var articlesTVC: ArticlesTableViewController?
@@ -68,15 +66,14 @@ class StockDetailsViewController: UIViewController {
 		companyNameLabel?.text = stock?.name
 		
 		openLabel?.text = String(doubleToFormatedString: stock?.rates?.open) ?? "—"
-		highLabel?.text = String(doubleToFormatedString: stock?.rates?.daysHigh) ?? "—"
-		lowLabel?.text = String(doubleToFormatedString: stock?.rates?.daysLow) ?? "—"
-		volLabel?.text = String(doubleToFormatedMillionString: stock?.rates?.volume) ?? "—"
+        
+		volLabel?.text = String(doubleToAbbreviatedString: stock?.rates?.volume, maximumDigits: 4) ?? "—"
 		peLabel?.text = String(doubleToFormatedString: stock?.rates?.peRatio) ?? "—"
-		mktCapLabel?.text = stock?.rates?.marketCapitalization ?? "—"
+		mktCapLabel?.text = String(doubleToAbbreviatedString: stock?.rates?.marketCapitalization, maximumDigits: 4) ?? "—"
 		yearHighLabel?.text = String(doubleToFormatedString: stock?.rates?.yearHigh) ?? "—"
 		yearLowLabel?.text = String(doubleToFormatedString: stock?.rates?.yearLow) ?? "—"
-		avgVolLabel?.text = String(doubleToFormatedMillionString: stock?.rates?.averageDailyVolume) ?? "—"
-		yieldLabel?.text = String(doubleRepresentingPercentageToFormatedString: stock?.rates?.dividendYield) ?? "—"
+		avgVolLabel?.text = String(doubleToAbbreviatedString: stock?.rates?.avgTotalVolume, maximumDigits: 4) ?? "—"
+		ytdChange?.text = String(doubleRepresentingPercentageToFormatedString: stock?.rates?.ytdChange) ?? "—"
 	}
 	
 	// MARK: - VC life cycle

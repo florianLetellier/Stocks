@@ -11,8 +11,8 @@
 /* Class = "UILabel"; text = "YEAR HIGH"; ObjectID = "6Xl-Hf-Ug9"; */
 "6Xl-Hf-Ug9.text" = "ÉVI. MAX";
 
-/* Class = "UILabel"; text = "YIELD"; ObjectID = "6vI-9J-4YE"; */
-"6vI-9J-4YE.text" = "HOZAM";
+/* Class = "UILabel"; text = "YTD"; ObjectID = "6vI-9J-4YE"; */
+"6vI-9J-4YE.text" = "ÉVKÖZI";
 
 /* Class = "UILabel"; text = "Subtitle"; ObjectID = "6zy-Dt-YjP"; */
 "6zy-Dt-YjP.text" = "Subtitle";
