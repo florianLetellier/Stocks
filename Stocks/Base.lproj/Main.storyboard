@@ -286,7 +286,7 @@
                         <outlet property="avgVolLabel" destination="mcc-Yc-IHv" id="41I-HY-jHi"/>
                         <outlet property="companyNameLabel" destination="7Sr-jq-UQZ" id="tVx-yM-EbK"/>
                         <outlet property="lastRefreshFootnoteLabel" destination="zPo-R5-4pD" id="6NK-SC-pzF"/>
-                        <outlet property="lineChartView" destination="hpE-8U-R5H" id="cZo-75-Dlc"/>
+                        <outlet property="lineChartView" destination="zIA-b5-lwb" id="O1N-wQ-YJN"/>
                         <outlet property="mktCapLabel" destination="vpy-ol-mA9" id="IBt-I5-1FY"/>
                         <outlet property="openLabel" destination="yhs-tP-ac7" id="8k2-nI-zbk"/>
                         <outlet property="pageControl" destination="ljz-84-HDM" id="sdM-uq-zlp"/>
@@ -493,11 +493,25 @@
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="V98-yE-dLX"/>
                 </view>
-                <view contentMode="scaleToFill" id="hpE-8U-R5H" customClass="LineChartView" customModule="Charts">
+                <view contentMode="scaleToFill" id="zIA-b5-lwb">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nVG-1n-f9J">
+                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            <connections>
+                                <segue destination="zM3-ST-sYc" kind="embed" id="kfR-oH-kUq"/>
+                            </connections>
+                        </containerView>
+                    </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <viewLayoutGuide key="safeArea" id="sFC-HH-Myf"/>
+                    <constraints>
+                        <constraint firstItem="nVG-1n-f9J" firstAttribute="leading" secondItem="zIA-b5-lwb" secondAttribute="leading" id="1fW-wS-FOk"/>
+                        <constraint firstAttribute="bottom" secondItem="nVG-1n-f9J" secondAttribute="bottom" id="4uj-Q3-jxR"/>
+                        <constraint firstItem="nVG-1n-f9J" firstAttribute="top" secondItem="zIA-b5-lwb" secondAttribute="top" id="U25-Vb-RSF"/>
+                        <constraint firstAttribute="trailing" secondItem="nVG-1n-f9J" secondAttribute="trailing" id="gll-0X-hJ1"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="2CM-l9-cKF"/>
                 </view>
             </objects>
             <point key="canvasLocation" x="1434" y="173"/>
@@ -591,7 +605,21 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rIL-9j-46r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1432" y="513"/>
+            <point key="canvasLocation" x="1168" y="510"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="HB8-88-BP5">
+            <objects>
+                <viewController id="zM3-ST-sYc" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yag-BC-2A5" customClass="LineChartView" customModule="Charts">
+                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BNJ-Be-TQe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1645" y="510"/>
         </scene>
     </scenes>
     <resources>

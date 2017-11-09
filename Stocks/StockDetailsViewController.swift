@@ -19,7 +19,7 @@ class StockDetailsViewController: UIViewController {
 	}
 	@IBOutlet var priceView: UIView!
 	@IBOutlet var articlesView: UIView!
-    @IBOutlet var lineChartView: LineChartView!
+    @IBOutlet var lineChartView: UIView!
     
 	
 	@IBOutlet weak var lastRefreshFootnoteLabel: UILabel!
@@ -86,7 +86,7 @@ class StockDetailsViewController: UIViewController {
 		// Setup scrollView
 		scrollViewSubViews = [
 			priceView,
-            lineChartView as UIView,
+            lineChartView,
 			articlesView
 		]
     }
