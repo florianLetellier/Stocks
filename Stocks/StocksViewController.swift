@@ -69,6 +69,11 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 			stock.refreshPrices() {
 				dispatchGroup.leave()
 			}
+            
+            dispatchGroup.enter()
+            stock.refreshhistoricalRates() {
+                dispatchGroup.leave()
+            }
 		}
 		
 		dispatchGroup.notify(queue: DispatchQueue.main) { [weak self] in
@@ -80,8 +85,8 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 					(cell as? YourStocksTableViewCell)?.updateUI()
 				}
 			}
-			
-			self?.stockDetailVC?.updateUI()
+            
+            self?.stockDetailVC?.updateUI()
 		}
 	}
 	

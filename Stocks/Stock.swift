@@ -14,8 +14,10 @@ class Stock: Codable {
 	let name: String
 	let stockExchange: String
 	var rates: Rates?
+    var historicalRates: [historicalRates]?
 	
-	private var dataTask: URLSessionDataTask?
+	private var ratesDataTask: URLSessionDataTask?
+    private var historicalRatesDataTask: URLSessionDataTask?
 	typealias JsonObject = [String: Any]
 	
 	// MARK: - Archiving Paths
@@ -23,7 +25,6 @@ class Stock: Codable {
     static let archiveURL = documentsDirectory.appendingPathComponent("stocks").appendingPathExtension("plist")
     
     // MARK: - Codable
-    
     enum CodingKeys: String, CodingKey {
         case symbol
         case name
@@ -86,10 +87,19 @@ class Stock: Codable {
             case ytdChange
         }
 	}
+    
+    // MARK: - historicalRates
+    class historicalRates: Decodable {
+        var date: Date
+        var open: Double
+        var close: Double
+        var high: Double
+        var low: Double
+    }
 	
 	// MARK: - Instance methods
 	func refreshPrices(completionHandler: @escaping () -> ()) {
-		dataTask?.cancel()
+		ratesDataTask?.cancel()
 		
         let stockURL: URL! = {
             var url = URL(string: "https://api.iextrading.com/")
@@ -102,7 +112,7 @@ class Stock: Codable {
             return url
         }()
 
-        dataTask = URLSession.shared.dataTask(with: stockURL) { [weak self] (data, response, error) in
+        ratesDataTask = URLSession.shared.dataTask(with: stockURL) { [weak self] (data, response, error) in
             DispatchQueue.main.async {
                 if let error = error {
                     print("Error: \(error.localizedDescription)")
@@ -122,6 +132,48 @@ class Stock: Codable {
             }
         }
         
-        dataTask?.resume()
+        ratesDataTask?.resume()
 	}
+    
+    func refreshhistoricalRates(completionHandler: @escaping () -> ()) {
+        historicalRatesDataTask?.cancel()
+        
+        let stockURL: URL! = {
+            var url = URL(string: "https://api.iextrading.com/")
+            
+            url?.appendPathComponent("1.0")
+            url?.appendPathComponent("stock")
+            url?.appendPathComponent(self.symbol)
+            url?.appendPathComponent("chart")
+            url?.appendPathComponent("1m")
+            
+            return url
+        }()
+        
+        historicalRatesDataTask = URLSession.shared.dataTask(with: stockURL) { [weak self] (data, response, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                }
+                else if let data = data {
+                    let decoder = JSONDecoder()
+                    let dateFormatter = DateFormatter()
+                    
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    decoder.dateDecodingStrategy = .formatted(dateFormatter)
+                    
+                    do {
+                        self?.historicalRates = try decoder.decode([Stock.historicalRates].self, from: data)
+                    }
+                    catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                completionHandler()
+            }
+        }
+        
+        historicalRatesDataTask?.resume()
+    }
+
 }
