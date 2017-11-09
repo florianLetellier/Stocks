@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Charts
 
 class StockDetailsViewController: UIViewController {
 	
@@ -18,6 +19,8 @@ class StockDetailsViewController: UIViewController {
 	}
 	@IBOutlet var priceView: UIView!
 	@IBOutlet var articlesView: UIView!
+    @IBOutlet var lineChartView: LineChartView!
+    
 	
 	@IBOutlet weak var lastRefreshFootnoteLabel: UILabel!
 	@IBOutlet weak var pageControl: UIPageControl!
@@ -83,6 +86,7 @@ class StockDetailsViewController: UIViewController {
 		// Setup scrollView
 		scrollViewSubViews = [
 			priceView,
+            lineChartView as UIView,
 			articlesView
 		]
     }
