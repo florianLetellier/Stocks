@@ -18,13 +18,12 @@ class StockQueryService {
 		
 		dataTask?.cancel()
 		
-		let baseURL = "https://s.yimg.com"
+		let baseURL = "https://finance.google.com"
 		var url = URLComponents(string: baseURL)
-		url?.path = "/aq/autoc"
+		url?.path = "/finance/match"
 		url?.queryItems = [
-			URLQueryItem(name: "query", value: searchTerm),
-			URLQueryItem(name: "region", value: "US"),
-			URLQueryItem(name: "lang", value: "en-US")
+			URLQueryItem(name: "matchtype", value: "matchall"),
+            URLQueryItem(name: "q", value: searchTerm)
 		]
 		
 		if let url = url?.url {
@@ -35,15 +34,12 @@ class StockQueryService {
 					}
 					else if let data = data {
 						if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? JsonObject {
-							guard
-								let containerJson = json?["ResultSet"] as? JsonObject,
-								let contanierJsonResults = containerJson["Result"] as? [JsonObject]
-							else {
+							guard let containerJson = json?["matches"] as? [JsonObject] else {
 								handler(stocks)
 								return
 							}
 							
-							for result in contanierJsonResults {
+							for result in containerJson {
 								if let newStock = Stock(json: result) {
 									stocks.append(newStock)
 								}

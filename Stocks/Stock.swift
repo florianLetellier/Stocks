@@ -47,9 +47,9 @@ class Stock: Codable {
 	
 	convenience init?(json: JsonObject) {
 		guard
-			let name = json["name"] as? String,
-			let symbol = json["symbol"] as? String,
-			let stockExchange = json["exchDisp"] as? String
+			let name = json["n"] as? String,
+			let symbol = json["t"] as? String,
+			let stockExchange = json["e"] as? String
 		else {
 			return nil
 		}
