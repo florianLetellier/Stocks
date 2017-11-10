@@ -7,3 +7,4 @@
 */
 
 "Last updated: %@" = "Legutóbb frissült: %@";
+"Error retrieving chart." = "Hiba a grafikon begyűjtésekor.";

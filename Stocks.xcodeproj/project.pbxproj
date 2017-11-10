@@ -22,6 +22,7 @@
 		8263D0751F2E0A02003D163B /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8263D0741F2E0A02003D163B /* StringExtension.swift */; };
 		8263D0771F2E64F4003D163B /* ArticlesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8263D0761F2E64F4003D163B /* ArticlesTableViewController.swift */; };
 		82902C581F71444F00AE594C /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82902C571F71444F00AE594C /* UIImageExtension.swift */; };
+		82D4E9471FB5C6B1008FF6A4 /* PriceChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D4E9461FB5C6B1008FF6A4 /* PriceChartViewController.swift */; };
 		82D5213E1F76C97300AF9172 /* ApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82D5213D1F76C97300AF9172 /* ApiKeys.plist */; };
 		82D521401F76CDDD00AF9172 /* ApiKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5213F1F76CDDD00AF9172 /* ApiKeys.swift */; };
 		82EAF8601F237D5700EB9BA6 /* StockQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EAF85F1F237D5700EB9BA6 /* StockQueryService.swift */; };
@@ -50,6 +51,7 @@
 		82902C571F71444F00AE594C /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		82BE8F861F86142000BDEC7A /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Main.strings; sourceTree = "<group>"; };
 		82BE8F871F86142100BDEC7A /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		82D4E9461FB5C6B1008FF6A4 /* PriceChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceChartViewController.swift; sourceTree = "<group>"; };
 		82D5213D1F76C97300AF9172 /* ApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ApiKeys.plist; sourceTree = "<group>"; };
 		82D5213F1F76CDDD00AF9172 /* ApiKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeys.swift; sourceTree = "<group>"; };
 		82EAF85F1F237D5700EB9BA6 /* StockQueryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockQueryService.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				8263D0721F2DAD45003D163B /* StockDetailsViewController.swift */,
 				8207BB181F17D4E1006A0C08 /* AddStockTableViewController.swift */,
 				8263D0761F2E64F4003D163B /* ArticlesTableViewController.swift */,
+				82D4E9461FB5C6B1008FF6A4 /* PriceChartViewController.swift */,
 			);
 			name = Controler;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				8263D0731F2DAD45003D163B /* StockDetailsViewController.swift in Sources */,
 				8207BB1D1F1B3B35006A0C08 /* StocksViewController.swift in Sources */,
 				82902C581F71444F00AE594C /* UIImageExtension.swift in Sources */,
+				82D4E9471FB5C6B1008FF6A4 /* PriceChartViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

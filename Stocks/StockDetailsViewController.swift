@@ -38,13 +38,18 @@ class StockDetailsViewController: UIViewController {
 	
 	// Articles subview
 	private var articlesTVC: ArticlesTableViewController?
+    private var priceChartVC: PriceChartViewController?
 	
 	private var scrollViewSubViews: [UIView]?
 	
 	var stock: Stock? {
 		didSet {
 			updateUI()
-			articlesTVC?.searchTerm = stock?.name
+            
+            if let stock = stock {
+                articlesTVC?.searchTerm = stock.name
+                priceChartVC?.setData(stock.historicalPrices)
+            }
 		}
 	}
 
@@ -109,9 +114,12 @@ class StockDetailsViewController: UIViewController {
 	
 	// MARK: - Navigation
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if segue.identifier == "EmbededArticles" {
+		if segue.identifier == "EmbedArticles" {
 			articlesTVC = segue.destination as? ArticlesTableViewController
 		}
+        else if segue.identifier == "EmbedPriceChart" {
+            priceChartVC = segue.destination as? PriceChartViewController
+        }
 	}
 }
 

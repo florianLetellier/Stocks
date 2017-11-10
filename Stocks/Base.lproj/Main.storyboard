@@ -480,7 +480,7 @@
                         <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="InW-Sw-zbh">
                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             <connections>
-                                <segue destination="jHj-gr-UgR" kind="embed" identifier="EmbededArticles" id="1TE-Ub-djR"/>
+                                <segue destination="jHj-gr-UgR" kind="embed" identifier="EmbedArticles" id="1TE-Ub-djR"/>
                             </connections>
                         </containerView>
                     </subviews>
@@ -500,11 +500,11 @@
                         <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nVG-1n-f9J">
                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             <connections>
-                                <segue destination="zM3-ST-sYc" kind="embed" id="kfR-oH-kUq"/>
+                                <segue destination="zM3-ST-sYc" kind="embed" identifier="EmbedPriceChart" id="kfR-oH-kUq"/>
                             </connections>
                         </containerView>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="nVG-1n-f9J" firstAttribute="leading" secondItem="zIA-b5-lwb" secondAttribute="leading" id="1fW-wS-FOk"/>
                         <constraint firstAttribute="bottom" secondItem="nVG-1n-f9J" secondAttribute="bottom" id="4uj-Q3-jxR"/>
@@ -607,15 +607,19 @@
             </objects>
             <point key="canvasLocation" x="1168" y="510"/>
         </scene>
-        <!--View Controller-->
+        <!--Price Chart View Controller-->
         <scene sceneID="HB8-88-BP5">
             <objects>
-                <viewController id="zM3-ST-sYc" sceneMemberID="viewController">
+                <viewController id="zM3-ST-sYc" customClass="PriceChartViewController" customModule="Stocks" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yag-BC-2A5" customClass="LineChartView" customModule="Charts">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="vwQ-Nc-rXF"/>
                     </view>
+                    <connections>
+                        <outlet property="chart" destination="yag-BC-2A5" id="pfH-Rr-8qN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BNJ-Be-TQe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

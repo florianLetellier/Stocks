@@ -14,7 +14,7 @@ class Stock: Codable {
 	let name: String
 	let stockExchange: String
 	var rates: Rates?
-    var historicalPrices: [dailyPrice]?
+    var historicalPrices = [dailyPrice]()
 	
 	private var ratesDataTask: URLSessionDataTask?
     private var historicalRatesDataTask: URLSessionDataTask?
