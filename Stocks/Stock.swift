@@ -14,7 +14,7 @@ class Stock: Codable {
 	let name: String
 	let stockExchange: String
 	var rates: Rates?
-    var historicalRates: [historicalRates]?
+    var historicalPrices: [dailyPrice]?
 	
 	private var ratesDataTask: URLSessionDataTask?
     private var historicalRatesDataTask: URLSessionDataTask?
@@ -89,7 +89,7 @@ class Stock: Codable {
 	}
     
     // MARK: - historicalRates
-    class historicalRates: Decodable {
+    class dailyPrice: Decodable {
         var date: Date
         var open: Double
         var close: Double
@@ -163,7 +163,7 @@ class Stock: Codable {
                     decoder.dateDecodingStrategy = .formatted(dateFormatter)
                     
                     do {
-                        self?.historicalRates = try decoder.decode([Stock.historicalRates].self, from: data)
+                        self?.historicalPrices = try decoder.decode([Stock.dailyPrice].self, from: data)
                     }
                     catch {
                         print(error.localizedDescription)
