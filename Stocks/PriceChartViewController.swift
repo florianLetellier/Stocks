@@ -49,7 +49,6 @@ class PriceChartViewController: UIViewController {
             let line = LineChartDataSet(values: lineChartEntry, label: nil)
             line.colors = [.black]
             line.drawCirclesEnabled = false
-            line.mode = .cubicBezier
             
             let gradientColors = [UIColor.black.cgColor, UIColor.clear.cgColor] as CFArray
             let colorLocations:[CGFloat] = [1.0, 0.0]
