@@ -26,19 +26,19 @@ class ArticlesTableViewController: UIViewController, UITableViewDelegate, UITabl
 	var searchTerm: String? {
 		didSet {
 			if let searchTerm = searchTerm, !searchTerm.isEmpty {
-					spinner?.startAnimating()
-					notFoundView?.isHidden = true
-					
-					articleQueryService.searchArticle(matching: searchTerm) { [weak self] newArticles in
-						self?.spinner?.stopAnimating()
-						
-						if newArticles.isEmpty {
-							self?.notFoundView?.isHidden = false
-						}
-						
-						self?.articles = newArticles
-					}
-				}
+                spinner?.startAnimating()
+                notFoundView?.isHidden = true
+
+                articleQueryService.searchArticle(forSymbol: searchTerm) { [weak self] newArticles in
+                    self?.spinner?.stopAnimating()
+                    
+                    if newArticles.isEmpty {
+                        self?.notFoundView?.isHidden = false
+                    }
+                    
+                    self?.articles = newArticles.sorted(by: {$0.pubDate > $1.pubDate})
+                }
+            }
 			else {
 				articles.removeAll()
 			}
@@ -63,7 +63,7 @@ class ArticlesTableViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		let formater = DateFormatter()
 		formater.dateStyle = .short
-		formater.timeStyle = .none
+		formater.timeStyle = .short
 		
 		cell.detailTextLabel?.text = "\(article.source) - \(formater.string(from: article.pubDate))"
 		
@@ -72,7 +72,6 @@ class ArticlesTableViewController: UIViewController, UITableViewDelegate, UITabl
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
-		// Open article in browser
 		UIApplication.shared.open(articles[indexPath.row].url)
 	}
 }

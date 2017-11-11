@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Article {
+class Article: Decodable {
 	// MARK: - Properties
 	let source: String
 	let headline: String
@@ -22,23 +22,32 @@ class Article {
 		self.pubDate = pubDate
 		self.url = url
 	}
-	
-	convenience init?(json: [String: Any]) {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-		
-		guard
-			let source				= json["source"] as? String, !source.isEmpty,
-			let pubDateString		= json["pub_date"] as? String,
-			let pubDate 			= dateFormatter.date(from: pubDateString),
-			let urlString			= json["web_url"] as? String,
-			let url					= URL(string: urlString),
-			let headlineContainer	= json["headline"] as? [String: Any],
-			let headline			= headlineContainer["main"] as? String
-		else {
-			return nil
-		}
+    
+    // MARK: - Codable
+    enum CodingKeys: String, CodingKey {
+        case source = "s"
+        case headline = "t"
+        case pubDate = "tt"
+        case url = "u"
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        source = try values.decode(String.self, forKey: .source)
+        url = try values.decode(URL.self, forKey: .url)
+        
+        let headlineHtmlString = try values.decode(String.self, forKey: .headline)
+        headline = headlineHtmlString.html2String
+        
+        let pubDateString = try values.decode(String.self, forKey: .pubDate)
 
-		self.init(source: source, headline: headline, pubDate: pubDate, url: url)
-	}
+        guard let pubDateInt = Double(pubDateString) else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(
+                codingPath: values.codingPath,
+                debugDescription: "Invalid publication date.")
+            )
+        }
+        
+        pubDate = Date(timeIntervalSince1970: pubDateInt)
+    }
 }

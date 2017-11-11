@@ -47,7 +47,7 @@ class StockDetailsViewController: UIViewController {
 			updateUI()
             
             if let stock = stock {
-                articlesTVC?.searchTerm = stock.name
+                articlesTVC?.searchTerm = stock.symbol
                 priceChartVC?.setData(stock.historicalPrices)
             }
 		}

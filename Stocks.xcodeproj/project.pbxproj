@@ -23,8 +23,6 @@
 		8263D0771F2E64F4003D163B /* ArticlesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8263D0761F2E64F4003D163B /* ArticlesTableViewController.swift */; };
 		82902C581F71444F00AE594C /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82902C571F71444F00AE594C /* UIImageExtension.swift */; };
 		82D4E9471FB5C6B1008FF6A4 /* PriceChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D4E9461FB5C6B1008FF6A4 /* PriceChartViewController.swift */; };
-		82D5213E1F76C97300AF9172 /* ApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82D5213D1F76C97300AF9172 /* ApiKeys.plist */; };
-		82D521401F76CDDD00AF9172 /* ApiKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5213F1F76CDDD00AF9172 /* ApiKeys.swift */; };
 		82EAF8601F237D5700EB9BA6 /* StockQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EAF85F1F237D5700EB9BA6 /* StockQueryService.swift */; };
 		EC5B6E45E85772126C205845 /* Pods_Stocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B285FE403413A6712A839E50 /* Pods_Stocks.framework */; };
 /* End PBXBuildFile section */
@@ -52,8 +50,6 @@
 		82BE8F861F86142000BDEC7A /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Main.strings; sourceTree = "<group>"; };
 		82BE8F871F86142100BDEC7A /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		82D4E9461FB5C6B1008FF6A4 /* PriceChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceChartViewController.swift; sourceTree = "<group>"; };
-		82D5213D1F76C97300AF9172 /* ApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ApiKeys.plist; sourceTree = "<group>"; };
-		82D5213F1F76CDDD00AF9172 /* ApiKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeys.swift; sourceTree = "<group>"; };
 		82EAF85F1F237D5700EB9BA6 /* StockQueryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockQueryService.swift; sourceTree = "<group>"; };
 		B285FE403413A6712A839E50 /* Pods_Stocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D91525C8FDA98C0B81D9F58F /* Pods-Stocks.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stocks.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Stocks/Pods-Stocks.debug.xcconfig"; sourceTree = "<group>"; };
@@ -82,7 +78,6 @@
 		8207BAF91F17D2C7006A0C08 = {
 			isa = PBXGroup;
 			children = (
-				82D5213D1F76C97300AF9172 /* ApiKeys.plist */,
 				8207BB041F17D2C7006A0C08 /* Stocks */,
 				8207BB031F17D2C7006A0C08 /* Products */,
 				D746F4A4F27D884410FA37DD /* Pods */,
@@ -121,7 +116,6 @@
 				8207BB051F17D2C7006A0C08 /* AppDelegate.swift */,
 				8263D0741F2E0A02003D163B /* StringExtension.swift */,
 				82902C571F71444F00AE594C /* UIImageExtension.swift */,
-				82D5213F1F76CDDD00AF9172 /* ApiKeys.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -239,7 +233,6 @@
 			files = (
 				826221DB1F861BB1007EBB91 /* Localizable.strings in Resources */,
 				8207BB101F17D2C7006A0C08 /* LaunchScreen.storyboard in Resources */,
-				82D5213E1F76C97300AF9172 /* ApiKeys.plist in Resources */,
 				8207BB0D1F17D2C7006A0C08 /* Assets.xcassets in Resources */,
 				8207BB0B1F17D2C7006A0C08 /* Main.storyboard in Resources */,
 			);
@@ -314,7 +307,6 @@
 				8263D0771F2E64F4003D163B /* ArticlesTableViewController.swift in Sources */,
 				82EAF8601F237D5700EB9BA6 /* StockQueryService.swift in Sources */,
 				8263D06F1F28E9E3003D163B /* ArticleQueryService.swift in Sources */,
-				82D521401F76CDDD00AF9172 /* ApiKeys.swift in Sources */,
 				8207BB1B1F17E54B006A0C08 /* Stock.swift in Sources */,
 				8263D0731F2DAD45003D163B /* StockDetailsViewController.swift in Sources */,
 				8207BB1D1F1B3B35006A0C08 /* StocksViewController.swift in Sources */,

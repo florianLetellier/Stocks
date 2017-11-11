@@ -13,29 +13,26 @@ class ArticleQueryService {
 	
 	var dataTask: URLSessionDataTask?
 	
-	func searchArticle(matching searchTerm: String, handler: @escaping ([Article]) -> ())  {
+	func searchArticle(forSymbol symbol: String, handler: @escaping ([Article]) -> ())  {
 		dataTask?.cancel()
 		
 		var articles = [Article]()
-		let nyTimesApiKey: String
-		
-		do {
-			nyTimesApiKey = try valueForAPIKey("NYTIMES_API_KEY")
-		}
-		catch {
-			print(error.localizedDescription)
-			handler(articles)
-			return
-		}
 
-		let baseURL = "https://api.nytimes.com"
+		let baseURL = "https://finance.google.com"
 		var url = URLComponents(string: baseURL)
-		url?.path = "/svc/search/v2/articlesearch.json"
+		url?.path = "/finance/company_news"
 		url?.queryItems = [
-			URLQueryItem(name: "api-key", value: nyTimesApiKey),
-			URLQueryItem(name: "sort", value: "newest"),
-			URLQueryItem(name: "q", value: searchTerm)
+			URLQueryItem(name: "q", value: symbol),
+            URLQueryItem(name: "output", value: "json")
 		]
+        
+        struct GoogleFinanceCompanyNewsResult: Decodable {
+            let clusters: [Cluster]
+            
+            struct Cluster: Decodable {
+                let a: [Article]?
+            }
+        }
 		
 		if let url = url?.url {
 			dataTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
@@ -44,21 +41,19 @@ class ArticleQueryService {
 						print("Error: \(error.localizedDescription)")
 					}
 					else if let data = data {
-						if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? JsonObject {
-							guard
-								let containerJson = json?["response"] as? JsonObject,
-								let contanierJsonResults = containerJson["docs"] as? [JsonObject]
-							else {
-								handler(articles)
-								return
-							}
-							
-							for result in contanierJsonResults {
-								if let newArticle = Article(json: result) {
-									articles.append(newArticle)
-								}
-							}
-						}
+                        do {
+                            let result = try JSONDecoder().decode(GoogleFinanceCompanyNewsResult.self, from: data)
+                            
+                            for cluster in result.clusters {
+                                if let newArticles = cluster.a {
+                                    articles += newArticles
+                                }
+                            }
+                        }
+                        catch {
+                            print(error.localizedDescription)
+                        }
+                        
 					}
 					handler(articles)
 				}
