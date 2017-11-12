@@ -9,20 +9,17 @@
 import UIKit
 
 class ArticlesTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-	// MARK: - Properties
+    // MARK: - Model
+    public var articles = [Article]() { didSet { tableView.reloadData() } }
+    
+	// MARK: - Instance properties
 	@IBOutlet weak var spinner: UIActivityIndicatorView!
 	@IBOutlet weak var notFoundView: UIView!
 	
 	@IBOutlet weak var tableView: UITableView!
 
 	private var articleQueryService = ArticleQueryService()
-	
-	private var articles = [Article]() {
-		didSet {
-			tableView.reloadData()
-		}
-	}
-	
+
 	var searchTerm: String? {
 		didSet {
 			if let searchTerm = searchTerm, !searchTerm.isEmpty {
