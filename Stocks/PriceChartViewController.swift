@@ -10,6 +10,10 @@ import UIKit
 import Charts
 
 class PriceChartViewController: UIViewController {
+    // MARK: - Model
+    public var data = [Date: Double]() { didSet { updateChart() } }
+    
+    // MARK: - Instance properties
     @IBOutlet var chart: LineChartView! {
         didSet {
             chart.isUserInteractionEnabled = false
@@ -29,8 +33,7 @@ class PriceChartViewController: UIViewController {
         }
     }
     
-    var data = [Date: Double]() { didSet { updateChart() } }
-    
+    // MARK: - Instance methods
     private func updateChart() {
         if data.isEmpty {
             chart.data = nil
@@ -45,22 +48,29 @@ class PriceChartViewController: UIViewController {
             lineChartEntry.append(value)
         }
         
-        let priceLine: LineChartDataSet = {
+        let priceLineDataSet: LineChartDataSet = {
+            let gradient: CGGradient! = {
+                let gradientColors = [UIColor.black.cgColor, UIColor.clear.cgColor] as CFArray
+                let colorLocations:[CGFloat] = [1.0, 0.0]
+                
+                return CGGradient.init(
+                    colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                    colors: gradientColors,
+                    locations: colorLocations
+                )
+            }()
+            
             let line = LineChartDataSet(values: lineChartEntry, label: nil)
             line.colors = [.black]
             line.drawCirclesEnabled = false
-            
-            let gradientColors = [UIColor.black.cgColor, UIColor.clear.cgColor] as CFArray
-            let colorLocations:[CGFloat] = [1.0, 0.0]
-            let gradient = CGGradient.init(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: gradientColors, locations: colorLocations)
-            line.fill = Fill.fillWithLinearGradient(gradient!, angle: 90.0)
+            line.fill = Fill.fillWithLinearGradient(gradient, angle: 90.0)
             line.drawFilledEnabled = true
             
             return line
         }()
 
         let chartData = LineChartData()
-        chartData.addDataSet(priceLine)
+        chartData.addDataSet(priceLineDataSet)
         chartData.setDrawValues(false)
         
         chart.data = chartData
@@ -69,7 +79,7 @@ class PriceChartViewController: UIViewController {
 
 // MARK: - PriceChartViewController extension
 extension PriceChartViewController {
-    func setData(_ dailyPrices:[Stock.dailyPrice]) {
+    func setData(from dailyPrices:[Stock.dailyPrice]) {
         data.removeAll()
         
         for price in dailyPrices {
