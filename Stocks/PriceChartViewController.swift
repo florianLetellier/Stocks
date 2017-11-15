@@ -11,7 +11,7 @@ import Charts
 
 class PriceChartViewController: UIViewController {
     // MARK: - Model
-    public var data = [Date: Double]() { didSet { updateChart() } }
+    public var data = [Date: Double]() { didSet { updateChartViewFromModel() } }
     
     // MARK: - Instance properties
     @IBOutlet var chart: LineChartView! {
@@ -34,7 +34,7 @@ class PriceChartViewController: UIViewController {
     }
     
     // MARK: - Instance methods
-    private func updateChart() {
+    private func updateChartViewFromModel() {
         if data.isEmpty {
             chart.data = nil
             chart.notifyDataSetChanged()
