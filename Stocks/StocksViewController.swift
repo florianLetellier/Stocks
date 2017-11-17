@@ -9,37 +9,36 @@
 import UIKit
 
 class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-	
+    // MARK: - Model
+    private var stocks: [Stock] = []
+    
 	// MARK: - Properites
-	fileprivate var stocks: [Stock] = []
-	private var stockDetailVC: StockDetailsViewController?
-	fileprivate var stateOfCells = YourStocksTableViewCell.State.priceChangePercentage {
-		didSet {
-			for cell in tableView.visibleCells {
-				if let cell = cell as? YourStocksTableViewCell {
-					cell.state = stateOfCells
-				}
-			}
-		}
-	}
-
-	@IBOutlet weak var tableView: UITableView!
-	
-	// MARK: - Instance Methods
-	override func setEditing(_ editing: Bool, animated: Bool) {
-		super.setEditing(editing, animated: animated)
-		tableView.setEditing(editing, animated: true)
-	}
-	
-	private func selectFirstRowIfNeeded() {
-		if tableView.indexPathForSelectedRow == nil && !stocks.isEmpty {
-			let rowToSelect = IndexPath(row: 0, section: 0)
-			
-			tableView.selectRow(at: rowToSelect, animated: true, scrollPosition: UITableViewScrollPosition.none)
-			tableView.delegate?.tableView?(tableView, didSelectRowAt: rowToSelect)
-		}
-	}
-	
+    @IBOutlet private weak var tableView: UITableView! {
+        didSet {
+            tableView.refreshControl = UIRefreshControl()
+            tableView.refreshControl?.addTarget(
+                self,
+                action: #selector(StocksViewController.refreshControlRefresh(refreshControl:)),
+                for: UIControlEvents.valueChanged
+            )
+        }
+    }
+    
+    private var stockDetailsVC: StockDetailsViewController?
+    
+    private let stockQueryService = StockQueryService()
+    
+    private var stateOfCells = YourStocksTableViewCell.State.priceChangePercentage {
+        didSet {
+            for cell in tableView.visibleCells {
+                if let cell = cell as? YourStocksTableViewCell {
+                    cell.state = stateOfCells
+                }
+            }
+        }
+    }
+    
+	// MARK: - Instance methods
 	private func saveStocks() {
         let propertyListEncoder = PropertyListEncoder()
         let encodedStocks = try? propertyListEncoder.encode(stocks)
@@ -61,17 +60,20 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 	}
 	
 	private func refreshStocks(handler: (()->())? = nil) {
-		UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
 		let dispatchGroup = DispatchGroup()
 		
 		for stock in stocks {
-			dispatchGroup.enter()
-			stock.refreshPrices() {
-				dispatchGroup.leave()
-			}
-            
             dispatchGroup.enter()
-            stock.refreshhistoricalRates() {
+            
+            _ = stockQueryService.getRates(forSymbol: stock.symbol) { result in
+                switch result {
+                case Result.Success(let newRates):
+                    stock.rates = newRates
+                case Result.Failure(let error):
+                    print(error.localizedDescription)
+                }
+                
                 dispatchGroup.leave()
             }
 		}
@@ -86,15 +88,26 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 				}
 			}
             
-            self?.stockDetailVC?.updateUI()
+            if let indexPath = self?.tableView.indexPathForSelectedRow {
+                self?.stockDetailsVC?.stock = self?.stocks[indexPath.row]
+            }
 		}
 	}
-	
-	private func performAddStockSegueIfNeeded() {
-		if stocks.count < 1 {
-			performSegue(withIdentifier: "AddStock", sender: nil)
-		}
-	}
+    
+    private func performAddStockSegueIfNeeded() {
+        if stocks.count < 1 {
+            performSegue(withIdentifier: "AddStock", sender: nil)
+        }
+    }
+    
+    private func selectFirstRowIfNeeded() {
+        if tableView.indexPathForSelectedRow == nil && !stocks.isEmpty {
+            let rowToSelect = IndexPath(row: 0, section: 0)
+            
+            tableView.selectRow(at: rowToSelect, animated: true, scrollPosition: UITableViewScrollPosition.none)
+            tableView.delegate?.tableView?(tableView, didSelectRowAt: rowToSelect)
+        }
+    }
 	
 	// MARK: - VC life cycle
 	override func viewDidLoad() {
@@ -105,14 +118,6 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 			stocks = savedStocks
 		}
 		
-		// Setup refresh control
-		tableView.refreshControl = UIRefreshControl()
-		tableView.refreshControl?.addTarget(
-			self,
-			action: #selector(StocksViewController.refreshControlRefresh(refreshControl:)),
-			for: UIControlEvents.valueChanged
-		)
-		
 		navigationItem.leftBarButtonItem = editButtonItem
 		performAddStockSegueIfNeeded()
 		selectFirstRowIfNeeded()
@@ -120,7 +125,11 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 	
 	// MARK: - TableViewDataSource and TableViewDelegate
-	
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.setEditing(editing, animated: true)
+    }
+    
 	func numberOfSections(in tableView: UITableView) -> Int {
 		return 1
     }
@@ -163,8 +172,8 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// If not already selected, update shown details for the selected cell
-		if stockDetailVC?.stock?.symbol != stocks[indexPath.row].symbol {
-			stockDetailVC?.stock = stocks[indexPath.row]
+		if stockDetailsVC?.stock?.symbol != stocks[indexPath.row].symbol {
+			stockDetailsVC?.stock = stocks[indexPath.row]
 		}
 	}
 
@@ -178,7 +187,7 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 	// MARK: - Navigation
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "EmbedStockDetail" {
-			stockDetailVC = segue.destination as? StockDetailsViewController
+			stockDetailsVC = segue.destination as? StockDetailsViewController
 		}
 		else if segue.identifier == "AddStock" && sender == nil {
 			(segue.destination as? AddStockTableViewController)?.showCancel = false

@@ -10,37 +10,45 @@ import UIKit
 
 class ArticlesTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     // MARK: - Model
-    public var articles = [Article]() { didSet { tableView.reloadData() } }
+    var articles = [Article]() {
+        didSet {
+            articles.sort(by: { $0.pubDate > $1.pubDate })
+            tableView.reloadData()
+            notFoundView?.isHidden = !articles.isEmpty
+        }
+    }
     
 	// MARK: - Instance properties
-	@IBOutlet weak var spinner: UIActivityIndicatorView!
-	@IBOutlet weak var notFoundView: UIView!
-	
-	@IBOutlet weak var tableView: UITableView!
+	@IBOutlet private weak var spinner: UIActivityIndicatorView!
+	@IBOutlet private weak var notFoundView: UIView!
+	@IBOutlet private weak var tableView: UITableView!
 
-	private var articleQueryService = ArticleQueryService()
+	private let articleQueryService = ArticleQueryService()
+    private var requestToken: RequestToken?
+    
+    // MARK: - Instance methods
+    func setArticles(from stock: Stock) {        
+        if let lastSet = stock.relatedArticles.lastSet?.timeIntervalSinceNow, lastSet > (-Constants.Stock.articlesValidFor) {
+            articles = stock.relatedArticles.entries
+        }
+        else {
+            requestToken?.cancel()
+            spinner?.startAnimating()
 
-	var searchTerm: String? {
-		didSet {
-			if let searchTerm = searchTerm, !searchTerm.isEmpty {
-                spinner?.startAnimating()
-                notFoundView?.isHidden = true
-
-                articleQueryService.searchArticle(forSymbol: searchTerm) { [weak self] newArticles in
-                    self?.spinner?.stopAnimating()
-                    
-                    if newArticles.isEmpty {
-                        self?.notFoundView?.isHidden = false
-                    }
-                    
-                    self?.articles = newArticles.sorted(by: {$0.pubDate > $1.pubDate})
+            requestToken = articleQueryService.searchForArticles(withSymbol: stock.symbol) { [weak self] result in
+                switch result {
+                case Result.Success(let newArticles):
+                    stock.relatedArticles.entries = newArticles
+                    self?.articles = newArticles
+                case Result.Failure(let error):
+                    self?.articles = []
+                    print(error.localizedDescription)
                 }
+                
+                self?.spinner?.stopAnimating()
             }
-			else {
-				articles.removeAll()
-			}
-		}
-	}
+        }
+    }
 
     // MARK: - UITableViewDataSource and UITableViewDelegate
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -21,6 +21,11 @@
 		8263D0731F2DAD45003D163B /* StockDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8263D0721F2DAD45003D163B /* StockDetailsViewController.swift */; };
 		8263D0751F2E0A02003D163B /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8263D0741F2E0A02003D163B /* StringExtension.swift */; };
 		8263D0771F2E64F4003D163B /* ArticlesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8263D0761F2E64F4003D163B /* ArticlesTableViewController.swift */; };
+		826D9F761FB85F7100DB86F5 /* StockRatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826D9F751FB85F7100DB86F5 /* StockRatesViewController.swift */; };
+		826FA41D1FBC77DB00E9E2EB /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826FA41C1FBC77DB00E9E2EB /* Result.swift */; };
+		826FA41F1FBC780300E9E2EB /* RequestToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826FA41E1FBC780300E9E2EB /* RequestToken.swift */; };
+		826FA4211FBD8B9A00E9E2EB /* EntryHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826FA4201FBD8B9A00E9E2EB /* EntryHolder.swift */; };
+		826FA4231FBD9B6600E9E2EB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826FA4221FBD9B6600E9E2EB /* Constants.swift */; };
 		82902C581F71444F00AE594C /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82902C571F71444F00AE594C /* UIImageExtension.swift */; };
 		82D4E9471FB5C6B1008FF6A4 /* PriceChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D4E9461FB5C6B1008FF6A4 /* PriceChartViewController.swift */; };
 		82EAF8601F237D5700EB9BA6 /* StockQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EAF85F1F237D5700EB9BA6 /* StockQueryService.swift */; };
@@ -46,6 +51,11 @@
 		8263D0721F2DAD45003D163B /* StockDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockDetailsViewController.swift; sourceTree = "<group>"; };
 		8263D0741F2E0A02003D163B /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		8263D0761F2E64F4003D163B /* ArticlesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticlesTableViewController.swift; sourceTree = "<group>"; };
+		826D9F751FB85F7100DB86F5 /* StockRatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockRatesViewController.swift; sourceTree = "<group>"; };
+		826FA41C1FBC77DB00E9E2EB /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		826FA41E1FBC780300E9E2EB /* RequestToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestToken.swift; sourceTree = "<group>"; };
+		826FA4201FBD8B9A00E9E2EB /* EntryHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryHolder.swift; sourceTree = "<group>"; };
+		826FA4221FBD9B6600E9E2EB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		82902C571F71444F00AE594C /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		82BE8F861F86142000BDEC7A /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Main.strings; sourceTree = "<group>"; };
 		82BE8F871F86142100BDEC7A /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -116,6 +126,7 @@
 				8207BB051F17D2C7006A0C08 /* AppDelegate.swift */,
 				8263D0741F2E0A02003D163B /* StringExtension.swift */,
 				82902C571F71444F00AE594C /* UIImageExtension.swift */,
+				826FA4221FBD9B6600E9E2EB /* Constants.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -133,6 +144,7 @@
 			children = (
 				8207BB1A1F17E54B006A0C08 /* Stock.swift */,
 				8263D0701F28EF1D003D163B /* Article.swift */,
+				826FA4201FBD8B9A00E9E2EB /* EntryHolder.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -141,10 +153,11 @@
 			isa = PBXGroup;
 			children = (
 				8207BB1C1F1B3B35006A0C08 /* StocksViewController.swift */,
-				8263D0721F2DAD45003D163B /* StockDetailsViewController.swift */,
 				8207BB181F17D4E1006A0C08 /* AddStockTableViewController.swift */,
-				8263D0761F2E64F4003D163B /* ArticlesTableViewController.swift */,
+				8263D0721F2DAD45003D163B /* StockDetailsViewController.swift */,
+				826D9F751FB85F7100DB86F5 /* StockRatesViewController.swift */,
 				82D4E9461FB5C6B1008FF6A4 /* PriceChartViewController.swift */,
+				8263D0761F2E64F4003D163B /* ArticlesTableViewController.swift */,
 			);
 			name = Controler;
 			sourceTree = "<group>";
@@ -154,6 +167,8 @@
 			children = (
 				82EAF85F1F237D5700EB9BA6 /* StockQueryService.swift */,
 				8263D06E1F28E9E3003D163B /* ArticleQueryService.swift */,
+				826FA41E1FBC780300E9E2EB /* RequestToken.swift */,
+				826FA41C1FBC77DB00E9E2EB /* Result.swift */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -299,19 +314,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				826FA4211FBD8B9A00E9E2EB /* EntryHolder.swift in Sources */,
 				8207BB1F1F1B3D8B006A0C08 /* YourStocksTableViewCell.swift in Sources */,
 				8263D0711F28EF1D003D163B /* Article.swift in Sources */,
 				8207BB191F17D4E1006A0C08 /* AddStockTableViewController.swift in Sources */,
 				8263D0751F2E0A02003D163B /* StringExtension.swift in Sources */,
 				8207BB061F17D2C7006A0C08 /* AppDelegate.swift in Sources */,
 				8263D0771F2E64F4003D163B /* ArticlesTableViewController.swift in Sources */,
+				826FA41D1FBC77DB00E9E2EB /* Result.swift in Sources */,
+				826FA41F1FBC780300E9E2EB /* RequestToken.swift in Sources */,
 				82EAF8601F237D5700EB9BA6 /* StockQueryService.swift in Sources */,
 				8263D06F1F28E9E3003D163B /* ArticleQueryService.swift in Sources */,
 				8207BB1B1F17E54B006A0C08 /* Stock.swift in Sources */,
 				8263D0731F2DAD45003D163B /* StockDetailsViewController.swift in Sources */,
 				8207BB1D1F1B3B35006A0C08 /* StocksViewController.swift in Sources */,
+				826D9F761FB85F7100DB86F5 /* StockRatesViewController.swift in Sources */,
 				82902C581F71444F00AE594C /* UIImageExtension.swift in Sources */,
 				82D4E9471FB5C6B1008FF6A4 /* PriceChartViewController.swift in Sources */,
+				826FA4231FBD9B6600E9E2EB /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

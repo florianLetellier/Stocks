@@ -11,10 +11,14 @@ import Charts
 
 class PriceChartViewController: UIViewController {
     // MARK: - Model
-    public var data = [Date: Double]() { didSet { updateChartViewFromModel() } }
+    var data = [Date: Double]() { didSet { updateChartViewFromModel() } }
     
     // MARK: - Instance properties
-    @IBOutlet var chart: LineChartView! {
+    private let stockQueryService = StockQueryService()
+    private var requestToken: RequestToken?
+    
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!
+    @IBOutlet private var chart: LineChartView! {
         didSet {
             chart.isUserInteractionEnabled = false
             
@@ -24,16 +28,45 @@ class PriceChartViewController: UIViewController {
             chart.noDataFont = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
             
             chart.xAxis.valueFormatter = DateValueFormatter()
-            chart.xAxis.labelCount = 4
+            chart.xAxis.labelCount = Constants.Chart.dateLabelCount
             chart.xAxis.labelPosition = .bottom
             
             chart.leftAxis.enabled = false
-            chart.rightAxis.labelCount = 2
+            chart.rightAxis.labelCount = Constants.Chart.priceLabelCount
             chart.rightAxis.labelPosition = .outsideChart
         }
     }
     
     // MARK: - Instance methods
+    func setData(from stock: Stock) {
+        data.removeAll()
+
+        if let lastSet = stock.historicalPrices.lastSet?.timeIntervalSinceNow, lastSet > (-Constants.Stock.articlesValidFor) {
+            for price in stock.historicalPrices.entries {
+                data[price.date] = price.open
+            }
+        }
+        else {
+            requestToken?.cancel()
+            spinner?.startAnimating()
+            
+            requestToken = stockQueryService.getDailyPrices(forSymbol: stock.symbol) { [weak self] result in
+                self?.spinner.stopAnimating()
+                
+                switch result {
+                case Result.Success(let newDailyPrices):
+                    stock.historicalPrices.entries = newDailyPrices
+                    
+                    for price in newDailyPrices {
+                        self?.data[price.date] = price.open
+                    }
+                case Result.Failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
     private func updateChartViewFromModel() {
         if data.isEmpty {
             chart.data = nil
@@ -72,20 +105,9 @@ class PriceChartViewController: UIViewController {
         let chartData = LineChartData()
         chartData.addDataSet(priceLineDataSet)
         chartData.setDrawValues(false)
-        
+
         chart.data = chartData
     } 
-}
-
-// MARK: - PriceChartViewController extension
-extension PriceChartViewController {
-    func setData(from dailyPrices:[Stock.dailyPrice]) {
-        data.removeAll()
-        
-        for price in dailyPrices {
-            data[price.date] = price.open
-        }
-    }
 }
 
 // MARK: - DateValueFormatter
