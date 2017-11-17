@@ -9,60 +9,61 @@
 import Foundation
 
 class ArticleQueryService {
-	typealias JsonObject = [String: Any]
-	
-	var dataTask: URLSessionDataTask?
-	
-	func searchArticle(forSymbol symbol: String, handler: @escaping ([Article]) -> ())  {
-		dataTask?.cancel()
-		
-		var articles = [Article]()
-
-		let baseURL = "https://finance.google.com"
-		var url = URLComponents(string: baseURL)
-		url?.path = "/finance/company_news"
-		url?.queryItems = [
-			URLQueryItem(name: "q", value: symbol),
-            URLQueryItem(name: "output", value: "json")
-		]
+    func searchForArticles(
+        withSymbol symbol: String,
+        completionHandler: @escaping (Result<[Article]>) -> Void
+    ) -> RequestToken? {
         
-        struct GoogleFinanceCompanyNewsResult: Decodable {
-            let clusters: [Cluster]
+        let searchArticlesUrl: URL = {
+            let baseURL = "https://finance.google.com"
             
-            struct Cluster: Decodable {
-                let a: [Article]?
-            }
-        }
-		
-		if let url = url?.url {
-			dataTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
-				DispatchQueue.main.async {
-					if let error = error {
-						print("Error: \(error.localizedDescription)")
-					}
-					else if let data = data {
-                        do {
-                            let result = try JSONDecoder().decode(GoogleFinanceCompanyNewsResult.self, from: data)
+            var url = URLComponents(string: baseURL)!
+            url.path = "/finance/company_news"
+            url.queryItems = [
+                URLQueryItem(name: "q", value: symbol),
+                URLQueryItem(name: "output", value: "json")
+            ]
+            
+            return url.url!
+        }()
+        
+        let task = URLSession.shared.dataTask(with: searchArticlesUrl) { (data, _, error) in
+            DispatchQueue.main.async {
+                switch (data, error) {
+                case (let data?, _):
+                    do {
+                        struct GoogleFinanceCompanyNewsResult: Decodable {
+                            let clusters: [Cluster]
                             
-                            for cluster in result.clusters {
-                                if let newArticles = cluster.a {
-                                    articles += newArticles
-                                }
+                            struct Cluster: Decodable {
+                                let a: [Article]?
                             }
                         }
-                        catch {
-                            print(error.localizedDescription)
+                        
+                        let result = try JSONDecoder().decode(GoogleFinanceCompanyNewsResult.self, from: data)
+                        
+                        var articles = [Article]()
+                        
+                        for cluster in result.clusters {
+                            if let newArticles = cluster.a {
+                                articles += newArticles
+                            }
                         }
                         
-					}
-					handler(articles)
-				}
-			})
-			
-			dataTask?.resume()
-		}
-		else {
-			handler(articles)
-		}
-	}
+                        completionHandler(Result.Success(articles))
+                    }
+                    catch {
+                        completionHandler(.Failure(error))
+                    }
+                case (_, let error?):
+                    completionHandler(.Failure(error))
+                case (nil, nil):
+                    fatalError("Neither data or error received.")
+                }
+            }
+        }
+        
+        task.resume()
+        return RequestToken(task: task)
+    }
 }
