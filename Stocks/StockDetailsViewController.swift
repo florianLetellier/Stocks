@@ -21,25 +21,26 @@ class StockDetailsViewController: UIViewController {
         }
     }
 	
-	// MARK: - Properties
-    @IBOutlet var stockRatesView: UIView!
-    @IBOutlet var articlesView: UIView!
-    @IBOutlet var lineChartView: UIView!
-
-    @IBOutlet weak var pageControl: UIPageControl!
+    // MARK: - Instance properties
+    @IBOutlet private weak var pageControl: UIPageControl!
     
-	@IBOutlet weak var scrollView: UIScrollView! {
+	@IBOutlet private weak var scrollView: UIScrollView! {
 		didSet {
 			scrollView.isPagingEnabled = true
 		}
 	}
+    
+    @IBOutlet private var stockRatesView: UIView!
+    @IBOutlet private var articlesView: UIView!
+    @IBOutlet private var lineChartView: UIView!
+    
+    lazy private var scrollViewSubViews: [UIView] = [stockRatesView, lineChartView, articlesView]
 
 	private var articlesTVC: ArticlesTableViewController?
     private var priceChartVC: PriceChartViewController?
     private var stockRatesVC: StockRatesViewController?
 	
-    lazy private var scrollViewSubViews: [UIView] = [stockRatesView, lineChartView, articlesView]
-	
+    
 	// MARK: - VC life cycle
     override func viewDidLoad() {
         super.viewDidLoad()

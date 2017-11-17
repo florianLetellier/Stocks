@@ -14,9 +14,9 @@ protocol YourStocksTableViewCellDelegate {
 
 class YourStocksTableViewCell: UITableViewCell {
 	// MARK: - Properties
-	@IBOutlet weak var symbolLabel: UILabel!
-	@IBOutlet weak var quoteLabel: UILabel!
-	@IBOutlet weak var changeButton: UIButton!
+	@IBOutlet private weak var symbolLabel: UILabel!
+	@IBOutlet private weak var quoteLabel: UILabel!
+	@IBOutlet private weak var changeButton: UIButton!
 	
 	var delegate: YourStocksTableViewCellDelegate?
 	

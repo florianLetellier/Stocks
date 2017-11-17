@@ -13,18 +13,18 @@ class StockRatesViewController: UIViewController {
     var stock: Stock? { didSet { updateViewFromModel() } }
     
     // MARK: - Instance properties
-    @IBOutlet weak var companyNameLabel: UILabel!
-    @IBOutlet weak var openLabel: UILabel!
-    @IBOutlet weak var volLabel: UILabel!
-    @IBOutlet weak var peLabel: UILabel!
-    @IBOutlet weak var mktCapLabel: UILabel!
-    @IBOutlet weak var yearHighLabel: UILabel!
-    @IBOutlet weak var yearLowLabel: UILabel!
-    @IBOutlet weak var avgVolLabel: UILabel!
-    @IBOutlet weak var ytdChange: UILabel!
+    @IBOutlet private weak var companyNameLabel: UILabel!
+    @IBOutlet private weak var openLabel: UILabel!
+    @IBOutlet private weak var volLabel: UILabel!
+    @IBOutlet private weak var peLabel: UILabel!
+    @IBOutlet private weak var mktCapLabel: UILabel!
+    @IBOutlet private weak var yearHighLabel: UILabel!
+    @IBOutlet private weak var yearLowLabel: UILabel!
+    @IBOutlet private weak var avgVolLabel: UILabel!
+    @IBOutlet private weak var ytdChange: UILabel!
     
     // MARK: - Instance methods
-    func updateViewFromModel() {
+    private func updateViewFromModel() {
         companyNameLabel?.text = stock?.name
         
         openLabel?.text = String(doubleToFormatedString: stock?.rates?.open) ?? "—"

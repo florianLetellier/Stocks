@@ -14,9 +14,6 @@ class PriceChartViewController: UIViewController {
     var data = [Date: Double]() { didSet { updateChartViewFromModel() } }
     
     // MARK: - Instance properties
-    private let stockQueryService = StockQueryService()
-    private var requestToken: RequestToken?
-    
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
     @IBOutlet private var chart: LineChartView! {
         didSet {
@@ -36,6 +33,9 @@ class PriceChartViewController: UIViewController {
             chart.rightAxis.labelPosition = .outsideChart
         }
     }
+    
+    private let stockQueryService = StockQueryService()
+    private var requestToken: RequestToken?
     
     // MARK: - Instance methods
     func setData(from stock: Stock) {

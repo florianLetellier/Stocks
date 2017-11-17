@@ -12,7 +12,7 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Model
     private var stocks: [Stock] = []
     
-	// MARK: - Properites
+	// MARK: - Instance properties
     @IBOutlet private weak var tableView: UITableView! {
         didSet {
             tableView.refreshControl = UIRefreshControl()
@@ -94,6 +94,12 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 		}
 	}
     
+    @objc func refreshControlRefresh(refreshControl: UIRefreshControl) {
+        refreshStocks {
+            refreshControl.endRefreshing()
+        }
+    }
+    
     private func performAddStockSegueIfNeeded() {
         if stocks.count < 1 {
             performSegue(withIdentifier: "AddStock", sender: nil)
@@ -174,13 +180,6 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
 		// If not already selected, update shown details for the selected cell
 		if stockDetailsVC?.stock?.symbol != stocks[indexPath.row].symbol {
 			stockDetailsVC?.stock = stocks[indexPath.row]
-		}
-	}
-
-	// MARK: - Actions
-	@objc func refreshControlRefresh(refreshControl: UIRefreshControl) {
-		refreshStocks { 
-			refreshControl.endRefreshing()
 		}
 	}
 	

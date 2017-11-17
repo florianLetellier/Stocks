@@ -9,8 +9,6 @@
 import Foundation
 
 class StockQueryService {
-	typealias JsonObject = [String: Any]
-    
     func getRates(
         forSymbol symbol: String,
         completionHandler: @escaping (Result<Stock.Rates>) -> Void
@@ -100,47 +98,50 @@ class StockQueryService {
         task.resume()
         return RequestToken(task: task)
     }
-	
-	func suggestStocks(matching searchTerm: String, handler: @escaping ([Stock]) -> ())  {
-		var stocks = [Stock]()
-		
-		let baseURL = "https://finance.google.com"
-		var url = URLComponents(string: baseURL)
-		url?.path = "/finance/match"
-		url?.queryItems = [
-			URLQueryItem(name: "matchtype", value: "matchall"),
-            URLQueryItem(name: "q", value: searchTerm)
-		]
-		
-		if let url = url?.url {
-			let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
-				DispatchQueue.main.async {
-					if let error = error {
-						print("Error: \(error.localizedDescription)")
-					}
-					else if let data = data {
-						if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? JsonObject {
-							guard let containerJson = json?["matches"] as? [JsonObject] else {
-								handler(stocks)
-								return
-							}
-							
-							for result in containerJson {
-								if let newStock = Stock(json: result) {
-									stocks.append(newStock)
-								}
-							}
-							
-						}
-					}
-					handler(stocks)
-				}
-			}
+    
+    func getStocks(
+        matching searchTerm: String,
+        completionHandler: @escaping (Result<[Stock]>) -> Void
+        ) -> RequestToken {
+        
+        let stockSuggestionUrl: URL = {
+            let baseURL = "https://finance.google.com"
             
-			dataTask.resume()
-		}
-		else {
-			handler(stocks)
-		}
-	}
+            var url = URLComponents(string: baseURL)!
+            url.path = "/finance/match"
+            url.queryItems = [
+                URLQueryItem(name: "matchtype", value: "matchall"),
+                URLQueryItem(name: "q", value: searchTerm)
+            ]
+            
+            return url.url!
+        }()
+        
+        let task = URLSession.shared.dataTask(with: stockSuggestionUrl) { (data, _, error) in
+            DispatchQueue.main.async {
+                switch (data, error) {
+                case (let data?, _):
+                    
+                    struct StockSuggestionResponse: Decodable {
+                        let matches: [Stock]
+                    }
+                    
+                    do {
+                        let response = try JSONDecoder().decode(StockSuggestionResponse.self, from: data)
+                        completionHandler(Result.Success(response.matches))
+                    }
+                    catch {
+                        completionHandler(.Failure(error))
+                    }
+                case (_, let error?):
+                    completionHandler(.Failure(error))
+                case (nil, nil):
+                    fatalError("Neither data or error received.")
+                }
+            }
+        }
+        
+        task.resume()
+        return RequestToken(task: task)
+    }
 }
