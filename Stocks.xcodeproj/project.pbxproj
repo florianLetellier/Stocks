@@ -106,50 +106,26 @@
 		8207BB041F17D2C7006A0C08 /* Stocks */ = {
 			isa = PBXGroup;
 			children = (
+				8207BB111F17D2C7006A0C08 /* Info.plist */,
 				8207BB091F17D2C7006A0C08 /* Main.storyboard */,
-				82EAF85C1F23774C00EB9BA6 /* View */,
-				82EAF85E1F23775A00EB9BA6 /* Controler */,
-				82EAF85D1F23775500EB9BA6 /* Model */,
-				82EAF8611F237D5D00EB9BA6 /* Networking */,
-				8207BB171F17D2DA006A0C08 /* Supporting Files */,
+				821E948C1FBF467400AC7211 /* View */,
+				821E948D1FBF468700AC7211 /* Controler */,
+				821E948E1FBF469A00AC7211 /* Model */,
+				821E94901FBF46B100AC7211 /* Networking */,
+				821E94911FBF46C600AC7211 /* Supporting Files */,
 			);
 			path = Stocks;
 			sourceTree = "<group>";
 		};
-		8207BB171F17D2DA006A0C08 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				826221DD1F861BB1007EBB91 /* Localizable.strings */,
-				8207BB0C1F17D2C7006A0C08 /* Assets.xcassets */,
-				8207BB0E1F17D2C7006A0C08 /* LaunchScreen.storyboard */,
-				8207BB111F17D2C7006A0C08 /* Info.plist */,
-				8207BB051F17D2C7006A0C08 /* AppDelegate.swift */,
-				8263D0741F2E0A02003D163B /* StringExtension.swift */,
-				82902C571F71444F00AE594C /* UIImageExtension.swift */,
-				826FA4221FBD9B6600E9E2EB /* Constants.swift */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		82EAF85C1F23774C00EB9BA6 /* View */ = {
+		821E948C1FBF467400AC7211 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				8207BB1E1F1B3D8B006A0C08 /* YourStocksTableViewCell.swift */,
 			);
-			name = View;
+			path = View;
 			sourceTree = "<group>";
 		};
-		82EAF85D1F23775500EB9BA6 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				8207BB1A1F17E54B006A0C08 /* Stock.swift */,
-				8263D0701F28EF1D003D163B /* Article.swift */,
-				826FA4201FBD8B9A00E9E2EB /* EntryHolder.swift */,
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
-		82EAF85E1F23775A00EB9BA6 /* Controler */ = {
+		821E948D1FBF468700AC7211 /* Controler */ = {
 			isa = PBXGroup;
 			children = (
 				8207BB1C1F1B3B35006A0C08 /* StocksViewController.swift */,
@@ -159,10 +135,20 @@
 				82D4E9461FB5C6B1008FF6A4 /* PriceChartViewController.swift */,
 				8263D0761F2E64F4003D163B /* ArticlesTableViewController.swift */,
 			);
-			name = Controler;
+			path = Controler;
 			sourceTree = "<group>";
 		};
-		82EAF8611F237D5D00EB9BA6 /* Networking */ = {
+		821E948E1FBF469A00AC7211 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8207BB1A1F17E54B006A0C08 /* Stock.swift */,
+				8263D0701F28EF1D003D163B /* Article.swift */,
+				826FA4201FBD8B9A00E9E2EB /* EntryHolder.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		821E94901FBF46B100AC7211 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
 				82EAF85F1F237D5700EB9BA6 /* StockQueryService.swift */,
@@ -170,7 +156,21 @@
 				826FA41E1FBC780300E9E2EB /* RequestToken.swift */,
 				826FA41C1FBC77DB00E9E2EB /* Result.swift */,
 			);
-			name = Networking;
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		821E94911FBF46C600AC7211 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				826221DD1F861BB1007EBB91 /* Localizable.strings */,
+				8207BB0C1F17D2C7006A0C08 /* Assets.xcassets */,
+				8207BB0E1F17D2C7006A0C08 /* LaunchScreen.storyboard */,
+				8207BB051F17D2C7006A0C08 /* AppDelegate.swift */,
+				8263D0741F2E0A02003D163B /* StringExtension.swift */,
+				82902C571F71444F00AE594C /* UIImageExtension.swift */,
+				826FA4221FBD9B6600E9E2EB /* Constants.swift */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		D746F4A4F27D884410FA37DD /* Pods */ = {
