@@ -9,77 +9,45 @@
 import UIKit
 
 class AddStockTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
-	// MARK: - Properties
-	var showCancel = true
-	
-	@IBOutlet weak var tableView: UITableView!
-	
-	
-	@IBOutlet weak var searchBar: UISearchBar!
-	
-	private var stocks = [Stock]() {
-		didSet {
-			tableView.reloadData()
-		}
-	}
-	
-	private var stockQueryService = StockQueryService()
-	
-	var selectedStock: Stock?
-	
-	// MARK: - VC life cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-		
-		if !showCancel {
-			searchBar.showsCancelButton = false
-		}
-
-        registerKeyboardNotifications()
-
-		// Show the keyboard
-		searchBar.becomeFirstResponder()
+    // MARK: - Model
+    private var stocks = [Stock]() {
+        didSet {
+            tableView.reloadData()
+        }
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+	// MARK: - Instance properties
+	@IBOutlet private weak var tableView: UITableView!
+	@IBOutlet private weak var searchBar: UISearchBar!
+    
+    var showCancel = true
+	private var stockQueryService = StockQueryService()
+    private var requestToken: RequestToken?
+	private(set) var selectedStock: Stock?
+    
+    // MARK: - Instance methods
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        guard !searchText.isEmpty else {
+            stocks = []
+            return
+        }
+        
+        requestToken?.cancel()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        
+        requestToken = stockQueryService.getStocks(matching: searchText) { [weak self] result in
+            switch result {
+            case Result.Success(let newStocks):
+                self?.stocks = newStocks
+            case Result.Failure(let error):
+                self?.stocks = []
+                print(error.localizedDescription)
+            }
+            
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        }
     }
-
-    // MARK: - Table view data source
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return stocks.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cellIdentifier = "Stock"
-		let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-
-		let stock = stocks[indexPath.row]
-		
-		cell.textLabel?.text = stock.symbol
-		cell.detailTextLabel?.text = "\(stock.name) - \(stock.stockExchange)"
-		
-        return cell
-    }
-
-	// MARK: - Instance methods
-	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		if !searchText.isEmpty {
-			UIApplication.shared.isNetworkActivityIndicatorVisible = true
-			
-			stockQueryService.suggestStocks(matching: searchText) { [weak self] newStocks in
-				UIApplication.shared.isNetworkActivityIndicatorVisible = false
-				self?.stocks = newStocks
-			}
-		}
-		else {
-			stocks.removeAll()
-		}
-	}
     
     private func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(
@@ -126,6 +94,43 @@ class AddStockTableViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
 	
+	// MARK: - VC life cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+		
+		if !showCancel {
+			searchBar.showsCancelButton = false
+		}
+
+        registerKeyboardNotifications()
+		searchBar.becomeFirstResponder()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // MARK: - Table view data source
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return stocks.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cellIdentifier = "Stock"
+		let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+
+		let stock = stocks[indexPath.row]
+		
+		cell.textLabel?.text = stock.symbol
+		cell.detailTextLabel?.text = "\(stock.name) - \(stock.stockExchange)"
+		
+        return cell
+    }
+	
 	// MARK: - Navigation
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
 		searchBar.resignFirstResponder()
@@ -140,8 +145,6 @@ class AddStockTableViewController: UIViewController, UITableViewDelegate, UITabl
 			}
 			
 			selectedStock = stocks[indexPath.row]
-			
-			// Hide the keyboard
 			searchBar.resignFirstResponder()
 		}
 	}

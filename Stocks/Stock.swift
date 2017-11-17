@@ -25,9 +25,9 @@ class Stock: Codable {
     
     // MARK: - Codable
     enum CodingKeys: String, CodingKey {
-        case symbol
-        case name
-        case stockExchange
+        case symbol = "t"
+        case name = "n"
+        case stockExchange = "e"
     }
     
     required init(from decoder: Decoder) throws {
@@ -42,18 +42,6 @@ class Stock: Codable {
 		self.name = name
 		self.stockExchange = stockExchange
 		self.symbol = symbol
-	}
-	
-	convenience init?(json: JsonObject) {
-		guard
-			let name = json["n"] as? String,
-			let symbol = json["t"] as? String,
-			let stockExchange = json["e"] as? String
-		else {
-			return nil
-		}
-		
-		self.init(symbol: symbol, name: name, stockExchange: stockExchange)
 	}
 	
     // MARK: - Nested structs    
