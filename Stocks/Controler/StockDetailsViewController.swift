@@ -20,33 +20,33 @@ class StockDetailsViewController: UIViewController {
             }
         }
     }
-	
+    
     // MARK: - Instance properties
     @IBOutlet private weak var pageControl: UIPageControl!
     
-	@IBOutlet private weak var scrollView: UIScrollView! {
-		didSet {
-			scrollView.isPagingEnabled = true
-		}
-	}
+    @IBOutlet private weak var scrollView: UIScrollView! {
+        didSet {
+            scrollView.isPagingEnabled = true
+        }
+    }
     
     @IBOutlet private var stockRatesView: UIView!
     @IBOutlet private var articlesView: UIView!
     @IBOutlet private var lineChartView: UIView!
     
     lazy private var scrollViewSubViews: [UIView] = [stockRatesView, lineChartView, articlesView]
-
-	private var articlesTVC: ArticlesTableViewController?
+    
+    private var articlesTVC: ArticlesTableViewController?
     private var priceChartVC: PriceChartViewController?
     private var stockRatesVC: StockRatesViewController?
-	
     
-	// MARK: - VC life cycle
+    
+    // MARK: - VC life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-	
-	override func viewDidLayoutSubviews() {
+    
+    override func viewDidLayoutSubviews() {
         scrollView.contentSize = CGSize(
             width: scrollView.bounds.width * CGFloat(scrollViewSubViews.count),
             height: scrollView.bounds.height
@@ -58,29 +58,29 @@ class StockDetailsViewController: UIViewController {
             scrollViewSubViews[i].frame.size.height = scrollView.bounds.height
             scrollViewSubViews[i].frame.origin.x = CGFloat(i) * scrollView.bounds.width
         }
-	}
-	
-	// MARK: - Navigation
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if segue.identifier == "EmbedArticles" {
-			articlesTVC = segue.destination as? ArticlesTableViewController
-		}
+    }
+    
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "EmbedArticles" {
+            articlesTVC = segue.destination as? ArticlesTableViewController
+        }
         else if segue.identifier == "EmbedPriceChart" {
             priceChartVC = segue.destination as? PriceChartViewController
         }
         else if segue.identifier == "EmbedStockRates" {
             stockRatesVC = segue.destination as? StockRatesViewController
         }
-	}
+    }
 }
 
 extension StockDetailsViewController: UIScrollViewDelegate {
-	func scrollViewDidScroll(_ sender: UIScrollView) {
-		if sender == self.scrollView {
-			let pageWith = scrollView.bounds.width
-			let pageFraction = scrollView.contentOffset.x/pageWith
-			
-			pageControl.currentPage = Int(round(pageFraction))
-		}
-	}
+    func scrollViewDidScroll(_ sender: UIScrollView) {
+        if sender == self.scrollView {
+            let pageWith = scrollView.bounds.width
+            let pageFraction = scrollView.contentOffset.x/pageWith
+            
+            pageControl.currentPage = Int(round(pageFraction))
+        }
+    }
 }

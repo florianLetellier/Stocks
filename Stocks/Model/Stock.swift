@@ -9,17 +9,17 @@
 import Foundation
 
 class Stock: Codable {
-	// MARK: - Properties
-	let symbol: String
-	let name: String
-	let stockExchange: String
-	var rates: Rates?
+    // MARK: - Properties
+    let symbol: String
+    let name: String
+    let stockExchange: String
+    var rates: Rates?
     var historicalPrices = EntryHolder<DailyPrice>()
     var relatedArticles = EntryHolder<Article>()
-
-	typealias JsonObject = [String: Any]
-	
-	// MARK: - Archiving Paths
+    
+    typealias JsonObject = [String: Any]
+    
+    // MARK: - Archiving Paths
     static let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let archiveURL = documentsDirectory.appendingPathComponent("stocks").appendingPathExtension("plist")
     
@@ -36,27 +36,27 @@ class Stock: Codable {
         name = try values.decode(String.self, forKey: .name)
         stockExchange = try values.decode(String.self, forKey: .stockExchange)
     }
-
-	// MARK: - Init
-	init(symbol: String, name: String, stockExchange: String) {
-		self.name = name
-		self.stockExchange = stockExchange
-		self.symbol = symbol
-	}
-	
+    
+    // MARK: - Init
+    init(symbol: String, name: String, stockExchange: String) {
+        self.name = name
+        self.stockExchange = stockExchange
+        self.symbol = symbol
+    }
+    
     // MARK: - Nested structs    
     struct Rates: Decodable {
-		var lastUpdate: Date?
-		var latestPrice: Double?
-		var priceChange: Double?
-		var priceChangePercentage: Double?
-		var open: Double?
-		var volume: Double?
-		var peRatio: Double?
-		var marketCapitalization: Double?
-		var yearHigh: Double?
-		var yearLow: Double?
-		var avgTotalVolume: Double?
+        var lastUpdate: Date?
+        var latestPrice: Double?
+        var priceChange: Double?
+        var priceChangePercentage: Double?
+        var open: Double?
+        var volume: Double?
+        var peRatio: Double?
+        var marketCapitalization: Double?
+        var yearHigh: Double?
+        var yearLow: Double?
+        var avgTotalVolume: Double?
         var ytdChange: Double?
         
         enum CodingKeys: String, CodingKey {
@@ -73,7 +73,7 @@ class Stock: Codable {
             case avgTotalVolume
             case ytdChange
         }
-	}
+    }
     
     struct DailyPrice: Decodable {
         var date: Date

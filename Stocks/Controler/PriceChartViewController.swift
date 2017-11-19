@@ -40,7 +40,7 @@ class PriceChartViewController: UIViewController {
     // MARK: - Instance methods
     func setData(from stock: Stock) {
         data.removeAll()
-
+        
         if let lastSet = stock.historicalPrices.lastSet?.timeIntervalSinceNow, lastSet > (-Constants.Stock.articlesValidFor) {
             for price in stock.historicalPrices.entries {
                 data[price.date] = price.open
@@ -101,11 +101,11 @@ class PriceChartViewController: UIViewController {
             
             return line
         }()
-
+        
         let chartData = LineChartData()
         chartData.addDataSet(priceLineDataSet)
         chartData.setDrawValues(false)
-
+        
         chart.data = chartData
     } 
 }

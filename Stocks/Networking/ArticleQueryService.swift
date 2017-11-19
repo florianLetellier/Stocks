@@ -12,7 +12,7 @@ class ArticleQueryService {
     func searchForArticles(
         withSymbol symbol: String,
         completionHandler: @escaping (Result<[Article]>) -> Void
-    ) -> RequestToken? {
+        ) -> RequestToken? {
         
         let searchArticlesUrl: URL = {
             let baseURL = "https://finance.google.com"

@@ -51,11 +51,11 @@ class StockQueryService {
         task.resume()
         return RequestToken(task: task)
     }
-
+    
     func getDailyPrices(
         forSymbol symbol: String,
         completionHandler: @escaping (Result<[Stock.DailyPrice]>) -> Void
-    ) -> RequestToken {
+        ) -> RequestToken {
         
         let stockURL: URL! = {
             var url = URL(string: "https://api.iextrading.com/")

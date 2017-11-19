@@ -9,32 +9,32 @@
 import Foundation
 
 extension String {
-	init?(doubleToFormatedString: Double?) {
-		let formatter = NumberFormatter()
-		formatter.numberStyle = .decimal
-		formatter.maximumFractionDigits = 2
-		
-		if let value = doubleToFormatedString, let string = formatter.string(from: NSNumber(value: value)) {
-			self.init(string)
-		}
-		else {
-			return nil
-		}
-	}
-
-	init?(doubleRepresentingPercentageToFormatedString: Double?) {
-		let formatter = NumberFormatter()
-		formatter.numberStyle = .percent
-		formatter.maximumFractionDigits = 2
-		
-		if let value = doubleRepresentingPercentageToFormatedString, let string = formatter.string(from: NSNumber(value: value)) {
-			self.init(string)
-		}
-		else {
-			return nil
-		}
-	}
-
+    init?(doubleToFormatedString: Double?) {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        
+        if let value = doubleToFormatedString, let string = formatter.string(from: NSNumber(value: value)) {
+            self.init(string)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    init?(doubleRepresentingPercentageToFormatedString: Double?) {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .percent
+        formatter.maximumFractionDigits = 2
+        
+        if let value = doubleRepresentingPercentageToFormatedString, let string = formatter.string(from: NSNumber(value: value)) {
+            self.init(string)
+        }
+        else {
+            return nil
+        }
+    }
+    
     init?(doubleToAbbreviatedString input: Double?, maximumDigits: Int) {
         guard let input = input else {
             return nil
@@ -51,7 +51,7 @@ extension String {
         
         self.init(
             (formatter.string(from: NSNumber(value: outputNumberInNewScale)) ?? String(outputNumberInNewScale))
-            + numberScaleSymbols[numberScale]
+                + numberScaleSymbols[numberScale]
         )
     }
     

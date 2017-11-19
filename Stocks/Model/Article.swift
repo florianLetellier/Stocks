@@ -9,19 +9,19 @@
 import Foundation
 
 class Article: Decodable {
-	// MARK: - Properties
-	let source: String
-	let headline: String
-	let pubDate: Date
-	let url: URL
-
-	// MARK: - Init
-	init(source: String, headline: String, pubDate: Date, url: URL) {
-		self.source = source
-		self.headline = headline
-		self.pubDate = pubDate
-		self.url = url
-	}
+    // MARK: - Properties
+    let source: String
+    let headline: String
+    let pubDate: Date
+    let url: URL
+    
+    // MARK: - Init
+    init(source: String, headline: String, pubDate: Date, url: URL) {
+        self.source = source
+        self.headline = headline
+        self.pubDate = pubDate
+        self.url = url
+    }
     
     // MARK: - Codable
     enum CodingKeys: String, CodingKey {
@@ -40,7 +40,7 @@ class Article: Decodable {
         headline = headlineHtmlString.html2String
         
         let pubDateString = try values.decode(String.self, forKey: .pubDate)
-
+        
         guard let pubDateInt = Double(pubDateString) else {
             throw DecodingError.dataCorrupted(DecodingError.Context(
                 codingPath: values.codingPath,

@@ -18,23 +18,23 @@ class ArticlesTableViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
-	// MARK: - Instance properties
-	@IBOutlet private weak var spinner: UIActivityIndicatorView!
-	@IBOutlet private weak var notFoundView: UIView!
-	@IBOutlet private weak var tableView: UITableView!
-
-	private let articleQueryService = ArticleQueryService()
+    // MARK: - Instance properties
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!
+    @IBOutlet private weak var notFoundView: UIView!
+    @IBOutlet private weak var tableView: UITableView!
+    
+    private let articleQueryService = ArticleQueryService()
     private var requestToken: RequestToken?
     
     // MARK: - Instance methods
-    func setArticles(from stock: Stock) {        
+    func setArticles(from stock: Stock) {
         if let lastSet = stock.relatedArticles.lastSet?.timeIntervalSinceNow, lastSet > (-Constants.Stock.articlesValidFor) {
             articles = stock.relatedArticles.entries
         }
         else {
             requestToken?.cancel()
             spinner?.startAnimating()
-
+            
             requestToken = articleQueryService.searchForArticles(withSymbol: stock.symbol) { [weak self] result in
                 switch result {
                 case Result.Success(let newArticles):
@@ -49,34 +49,34 @@ class ArticlesTableViewController: UIViewController, UITableViewDelegate, UITabl
             }
         }
     }
-
+    
     // MARK: - UITableViewDataSource and UITableViewDelegate
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return articles.count
+        return articles.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cellIdentifier = "Article"
-		let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-		let article = articles[indexPath.row]
-		
-		cell.textLabel?.text = article.headline
-		
-		let formater = DateFormatter()
-		formater.dateStyle = .short
-		formater.timeStyle = .short
-		
-		cell.detailTextLabel?.text = "\(article.source) - \(formater.string(from: article.pubDate))"
-		
-		return cell
+        let cellIdentifier = "Article"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let article = articles[indexPath.row]
+        
+        cell.textLabel?.text = article.headline
+        
+        let formater = DateFormatter()
+        formater.dateStyle = .short
+        formater.timeStyle = .short
+        
+        cell.detailTextLabel?.text = "\(article.source) - \(formater.string(from: article.pubDate))"
+        
+        return cell
     }
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		tableView.deselectRow(at: indexPath, animated: true)
-		UIApplication.shared.open(articles[indexPath.row].url)
-	}
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        UIApplication.shared.open(articles[indexPath.row].url)
+    }
 }

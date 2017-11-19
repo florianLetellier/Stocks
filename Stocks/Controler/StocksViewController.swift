@@ -12,7 +12,7 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Model
     private var stocks: [Stock] = []
     
-	// MARK: - Instance properties
+    // MARK: - Instance properties
     @IBOutlet private weak var tableView: UITableView! {
         didSet {
             tableView.refreshControl = UIRefreshControl()
@@ -38,32 +38,27 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-	// MARK: - Instance methods
-	private func saveStocks() {
+    // MARK: - Instance methods
+    private func saveStocks() {
         let propertyListEncoder = PropertyListEncoder()
         let encodedStocks = try? propertyListEncoder.encode(stocks)
         
         try? encodedStocks?.write(to: Stock.archiveURL, options: .noFileProtection)
-	}
-	
-	private func loadStocks() -> [Stock]? {
-        let propertyListDecoder = PropertyListDecoder()
-        
-        if let retrievedStocksData = try? Data(contentsOf: Stock.archiveURL),
-            let decodedStocks = try? propertyListDecoder.decode([Stock].self, from: retrievedStocksData)
-        {
-            return decodedStocks
-        }
-        else {
+    }
+    
+    private func loadStocks() -> [Stock]? {
+        guard let retrievedStocksData = try? Data(contentsOf: Stock.archiveURL) else {
             return nil
         }
-	}
-	
-	private func refreshStocks(handler: (()->())? = nil) {
+        
+        return try? PropertyListDecoder().decode([Stock].self, from: retrievedStocksData)
+    }
+    
+    private func refreshStocks(handler: (()->())? = nil) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-		let dispatchGroup = DispatchGroup()
-		
-		for stock in stocks {
+        let dispatchGroup = DispatchGroup()
+        
+        for stock in stocks {
             dispatchGroup.enter()
             
             _ = stockQueryService.getRates(forSymbol: stock.symbol) { result in
@@ -76,23 +71,23 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 dispatchGroup.leave()
             }
-		}
-		
-		dispatchGroup.notify(queue: DispatchQueue.main) { [weak self] in
-			UIApplication.shared.isNetworkActivityIndicatorVisible = false
-			handler?()
-			
-			if let visibleCells = self?.tableView.visibleCells {
-				for cell in visibleCells {
-					(cell as? YourStocksTableViewCell)?.updateUI()
-				}
-			}
+        }
+        
+        dispatchGroup.notify(queue: DispatchQueue.main) { [weak self] in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            handler?()
+            
+            if let visibleCells = self?.tableView.visibleCells {
+                for cell in visibleCells {
+                    (cell as? YourStocksTableViewCell)?.updateUI()
+                }
+            }
             
             if let indexPath = self?.tableView.indexPathForSelectedRow {
                 self?.stockDetailsVC?.stock = self?.stocks[indexPath.row]
             }
-		}
-	}
+        }
+    }
     
     @objc func refreshControlRefresh(refreshControl: UIRefreshControl) {
         refreshStocks {
@@ -114,109 +109,109 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
             tableView.delegate?.tableView?(tableView, didSelectRowAt: rowToSelect)
         }
     }
-	
-	// MARK: - VC life cycle
-	override func viewDidLoad() {
+    
+    // MARK: - VC life cycle
+    override func viewDidLoad() {
         super.viewDidLoad()
-		
-		// Load saved stocks
-		if let savedStocks = loadStocks() {
-			stocks = savedStocks
-		}
-		
-		navigationItem.leftBarButtonItem = editButtonItem
-		performAddStockSegueIfNeeded()
-		selectFirstRowIfNeeded()
-		refreshStocks()
+        
+        // Load saved stocks
+        if let savedStocks = loadStocks() {
+            stocks = savedStocks
+        }
+        
+        navigationItem.leftBarButtonItem = editButtonItem
+        performAddStockSegueIfNeeded()
+        selectFirstRowIfNeeded()
+        refreshStocks()
     }
-	
-	// MARK: - TableViewDataSource and TableViewDelegate
+    
+    // MARK: - TableViewDataSource and TableViewDelegate
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.setEditing(editing, animated: true)
     }
     
-	func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return stocks.count
+        return stocks.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cellIdentifier = "yourStocksTableViewCell"
-		
-		guard
-			let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YourStocksTableViewCell
-		else {
-			fatalError("The dequeued cell is not an instance of StockTableViewCell.")
-		}
-		
-		cell.stock = stocks[indexPath.row]
-		cell.delegate = self
-		return cell
+        let cellIdentifier = "yourStocksTableViewCell"
+        
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YourStocksTableViewCell
+            else {
+                fatalError("The dequeued cell is not an instance of StockTableViewCell.")
+        }
+        
+        cell.stock = stocks[indexPath.row]
+        cell.delegate = self
+        return cell
     }
-
+    
     func tableView(
-		_ tableView: UITableView,
-		commit editingStyle: UITableViewCellEditingStyle,
-		forRowAt indexPath: IndexPath
-	) {
-		
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCellEditingStyle,
+        forRowAt indexPath: IndexPath
+        ) {
+        
         if editingStyle == .delete {
             // Delete the row from the data source
-			stocks.remove(at: indexPath.row)
-			saveStocks()
-			
-			// Update UI
+            stocks.remove(at: indexPath.row)
+            saveStocks()
+            
+            // Update UI
             tableView.deleteRows(at: [indexPath], with: .fade)
-			performAddStockSegueIfNeeded()
-			selectFirstRowIfNeeded()
-		}
+            performAddStockSegueIfNeeded()
+            selectFirstRowIfNeeded()
+        }
     }
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		// If not already selected, update shown details for the selected cell
-		if stockDetailsVC?.stock?.symbol != stocks[indexPath.row].symbol {
-			stockDetailsVC?.stock = stocks[indexPath.row]
-		}
-	}
-	
-	// MARK: - Navigation
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if segue.identifier == "EmbedStockDetail" {
-			stockDetailsVC = segue.destination as? StockDetailsViewController
-		}
-		else if segue.identifier == "AddStock" && sender == nil {
-			(segue.destination as? AddStockTableViewController)?.showCancel = false
-		}
-	}
-	
-	@IBAction func unwindToStocks(sender: UIStoryboardSegue) {
-		if let sourceViewController = sender.source as? AddStockTableViewController, let newStock = sourceViewController.selectedStock {
-			// Add the selected stock if not in the array already
-			if !(stocks.contains { $0.symbol == newStock.symbol }) {
-				let newIndexPath = IndexPath(row: stocks.count, section: 0)
-				
-				stocks.append(newStock)
-				saveStocks()
-				
-				tableView.insertRows(at: [newIndexPath], with: .automatic)
-				
-				if let cell = tableView.cellForRow(at: newIndexPath) as? YourStocksTableViewCell {
-					cell.state = stateOfCells
-				}
-				
-				selectFirstRowIfNeeded()
-				refreshStocks()
-			}
-		}
-	}
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // If not already selected, update shown details for the selected cell
+        if stockDetailsVC?.stock?.symbol != stocks[indexPath.row].symbol {
+            stockDetailsVC?.stock = stocks[indexPath.row]
+        }
+    }
+    
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "EmbedStockDetail" {
+            stockDetailsVC = segue.destination as? StockDetailsViewController
+        }
+        else if segue.identifier == "AddStock" && sender == nil {
+            (segue.destination as? AddStockTableViewController)?.showCancel = false
+        }
+    }
+    
+    @IBAction func unwindToStocks(sender: UIStoryboardSegue) {
+        if let sourceViewController = sender.source as? AddStockTableViewController, let newStock = sourceViewController.selectedStock {
+            // Add the selected stock if not in the array already
+            if !(stocks.contains { $0.symbol == newStock.symbol }) {
+                let newIndexPath = IndexPath(row: stocks.count, section: 0)
+                
+                stocks.append(newStock)
+                saveStocks()
+                
+                tableView.insertRows(at: [newIndexPath], with: .automatic)
+                
+                if let cell = tableView.cellForRow(at: newIndexPath) as? YourStocksTableViewCell {
+                    cell.state = stateOfCells
+                }
+                
+                selectFirstRowIfNeeded()
+                refreshStocks()
+            }
+        }
+    }
 }
 
 extension StocksViewController: YourStocksTableViewCellDelegate {
-	func didTapChangeState() {
-		stateOfCells.nextState()
-	}
+    func didTapChangeState() {
+        stateOfCells.nextState()
+    }
 }
