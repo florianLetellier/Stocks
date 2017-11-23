@@ -142,10 +142,10 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "yourStocksTableViewCell"
         
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? YourStocksTableViewCell
-            else {
-                fatalError("The dequeued cell is not an instance of StockTableViewCell.")
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: cellIdentifier, for: indexPath) as? YourStocksTableViewCell
+        else {
+            fatalError("The dequeued cell is not an instance of StockTableViewCell.")
         }
         
         cell.stock = stocks[indexPath.row]
@@ -189,23 +189,28 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     @IBAction func unwindToStocks(sender: UIStoryboardSegue) {
-        if let sourceViewController = sender.source as? AddStockTableViewController, let newStock = sourceViewController.selectedStock {
-            // Add the selected stock if not in the array already
-            if !(stocks.contains { $0.symbol == newStock.symbol }) {
-                let newIndexPath = IndexPath(row: stocks.count, section: 0)
-                
-                stocks.append(newStock)
-                saveStocks()
-                
-                tableView.insertRows(at: [newIndexPath], with: .automatic)
-                
-                if let cell = tableView.cellForRow(at: newIndexPath) as? YourStocksTableViewCell {
-                    cell.state = stateOfCells
-                }
-                
-                selectFirstRowIfNeeded()
-                refreshStocks()
+        guard
+            let sourceViewController = sender.source as? AddStockTableViewController,
+            let newStock = sourceViewController.selectedStock
+        else {
+            return
+        }
+
+        // Add the selected stock if not in the array already
+        if !(stocks.contains { $0.symbol == newStock.symbol }) {
+            let newIndexPath = IndexPath(row: stocks.count, section: 0)
+            
+            stocks.append(newStock)
+            saveStocks()
+            
+            tableView.insertRows(at: [newIndexPath], with: .automatic)
+            
+            if let cell = tableView.cellForRow(at: newIndexPath) as? YourStocksTableViewCell {
+                cell.state = stateOfCells
             }
+            
+            selectFirstRowIfNeeded()
+            refreshStocks()
         }
     }
 }
