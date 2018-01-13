@@ -14,25 +14,13 @@ protocol YourStocksTableViewCellDelegate {
 
 class YourStocksTableViewCell: UITableViewCell {
     // MARK: - Properties
-    @IBOutlet private weak var symbolLabel: UILabel!
-    @IBOutlet private weak var quoteLabel: UILabel!
-    @IBOutlet private weak var changeButton: UIButton!
+    @IBOutlet weak var symbolLabel: UILabel!
+    @IBOutlet weak var quoteLabel: UILabel!
+    @IBOutlet weak var changeButton: UIButton!
     
     var delegate: YourStocksTableViewCellDelegate?
     
-    var stock: Stock? {
-        didSet {
-            updateUI()
-        }
-    }
-    
-    var state = State.priceChangePercentage {
-        didSet {
-            updateUI()
-        }
-    }
-    
-    enum State: Int {
+    enum State {
         case priceChangePercentage
         case priceChange
         case marketCapitalization
@@ -53,8 +41,10 @@ class YourStocksTableViewCell: UITableViewCell {
     @IBAction func changeStateTapped(_ sender: UIButton) {
         delegate?.didTapChangeState()
     }
-    
-    func updateUI() {
+}
+
+extension YourStocksTableViewCell {
+    func configureForStock(_ stock: Stock?, withState state: State) {
         // Symbol
         symbolLabel.text = stock?.symbol
         

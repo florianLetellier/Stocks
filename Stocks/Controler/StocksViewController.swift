@@ -30,11 +30,7 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     private var stateOfCells = YourStocksTableViewCell.State.priceChangePercentage {
         didSet {
-            for cell in tableView.visibleCells {
-                if let cell = cell as? YourStocksTableViewCell {
-                    cell.state = stateOfCells
-                }
-            }
+            updateCellsFromModel()
         }
     }
     
@@ -77,11 +73,7 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             handler?()
             
-            if let visibleCells = self?.tableView.visibleCells {
-                for cell in visibleCells {
-                    (cell as? YourStocksTableViewCell)?.updateUI()
-                }
-            }
+            self?.updateCellsFromModel()
             
             if let indexPath = self?.tableView.indexPathForSelectedRow {
                 self?.stockDetailsVC?.stock = self?.stocks[indexPath.row]
@@ -147,9 +139,10 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
         else {
             fatalError("The dequeued cell is not an instance of StockTableViewCell.")
         }
-        
-        cell.stock = stocks[indexPath.row]
+
+        cell.configureForStock(stocks[indexPath.row], withState: stateOfCells)
         cell.delegate = self
+        
         return cell
     }
     
@@ -175,6 +168,14 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // If not already selected, update shown details for the selected cell
         if stockDetailsVC?.stock?.symbol != stocks[indexPath.row].symbol {
             stockDetailsVC?.stock = stocks[indexPath.row]
+        }
+    }
+    
+    private func updateCellsFromModel() {
+        for cell in tableView.visibleCells {
+            if let stockCell = cell as? YourStocksTableViewCell, let indexPath = tableView.indexPath(for: cell) {
+                stockCell.configureForStock(stocks[indexPath.row], withState: stateOfCells)
+            }
         }
     }
     
@@ -206,7 +207,7 @@ class StocksViewController: UIViewController, UITableViewDelegate, UITableViewDa
             tableView.insertRows(at: [newIndexPath], with: .automatic)
             
             if let cell = tableView.cellForRow(at: newIndexPath) as? YourStocksTableViewCell {
-                cell.state = stateOfCells
+                cell.configureForStock(stocks[newIndexPath.row], withState: stateOfCells)
             }
             
             selectFirstRowIfNeeded()
