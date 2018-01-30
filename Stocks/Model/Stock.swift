@@ -15,6 +15,7 @@ class Stock: Codable {
     let stockExchange: String
     var rates: Rates?
     var historicalPrices = EntryHolder<DailyPrice>()
+    var historicalCoinPrices = EntryHolder<DailyPriceCoin>()
     var relatedArticles = EntryHolder<Article>()
     
     typealias JsonObject = [String: Any]
@@ -77,9 +78,20 @@ class Stock: Codable {
     
     struct DailyPrice: Decodable {
         var date: Date
-        var open: Double
-        var close: Double
+        var minute: String
+        //var open: Double
+        //var close: Double
         var high: Double
         var low: Double
+    }
+    
+    struct DailyPriceCoin: Decodable {
+        var time: Date
+        var high: Double
+        var low: Double
+    }
+    
+    struct ArrayPriceCoin: Decodable {
+        var Data:[DailyPriceCoin]
     }
 }

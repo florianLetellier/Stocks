@@ -52,6 +52,47 @@ class StockQueryService {
         return RequestToken(task: task)
     }
     
+    func getDailyPricesCoin(
+        forSymbol symbol: String,
+        completionHandler: @escaping (Result<Stock.ArrayPriceCoin>) -> Void
+        ) -> RequestToken {
+        
+        let stockURL: URL! = {
+            let url = URL(string: "https://min-api.cryptocompare.com/data/histominute?fsym=\(symbol)&tsym=USD&limit=60&aggregate=3&e=CCCAGG")
+        
+            
+            
+            return url
+        }()
+        print("url : \(stockURL!)")
+        let task = URLSession.shared.dataTask(with: stockURL!) { (data, _, error) in
+            DispatchQueue.main.async {
+                switch (data, error) {
+                case (let data?, _):
+                    do {
+                        let decoder = JSONDecoder()
+                      
+                        decoder.dateDecodingStrategy = .secondsSince1970
+                        
+                        let articles = try decoder.decode(Stock.ArrayPriceCoin.self, from: data)
+                        dump(articles)
+                        completionHandler(Result.Success(articles))
+                    }
+                    catch {
+                        completionHandler(.Failure(error))
+                    }
+                case (_, let error?):
+                    completionHandler(.Failure(error))
+                case (nil, nil):
+                    fatalError("Neither data or error received.")
+                }
+            }
+        }
+        
+        task.resume()
+        return RequestToken(task: task)
+    }
+    
     func getDailyPrices(
         forSymbol symbol: String,
         completionHandler: @escaping (Result<[Stock.DailyPrice]>) -> Void
@@ -64,8 +105,9 @@ class StockQueryService {
             url?.appendPathComponent("stock")
             url?.appendPathComponent(symbol)
             url?.appendPathComponent("chart")
-            url?.appendPathComponent("1m")
+            url?.appendPathComponent("1d")
             
+            print("url : \(url)")
             return url
         }()
         
@@ -77,9 +119,9 @@ class StockQueryService {
                         let decoder = JSONDecoder()
                         let dateFormatter = DateFormatter()
                         
-                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        dateFormatter.dateFormat = "yyyyMMdd"
                         decoder.dateDecodingStrategy = .formatted(dateFormatter)
-                        
+                        dump("data : \(data.description)")
                         let articles = try decoder.decode([Stock.DailyPrice].self, from: data)
                         
                         completionHandler(Result.Success(articles))

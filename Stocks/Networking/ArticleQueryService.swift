@@ -26,7 +26,7 @@ class ArticleQueryService {
             
             return url.url!
         }()
-        
+        print("searchArticlesUrl : \(searchArticlesUrl)")
         let task = URLSession.shared.dataTask(with: searchArticlesUrl) { (data, _, error) in
             DispatchQueue.main.async {
                 switch (data, error) {

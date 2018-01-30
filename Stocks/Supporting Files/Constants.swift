@@ -10,12 +10,12 @@ import Foundation
 
 enum Constants {
     enum Chart {
-        static let dateLabelCount = 4
-        static let priceLabelCount = 2
+        static let dateLabelCount = 7
+        static let priceLabelCount = 3
     }
     
     enum Stock {
-        static let historicalPricesValidFor: TimeInterval = 60
+        static let historicalPricesValidFor: TimeInterval = 1
         static let articlesValidFor: TimeInterval = 60
     }
 }

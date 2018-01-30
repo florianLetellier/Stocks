@@ -217,7 +217,7 @@
 				TargetAttributes = {
 					8207BB011F17D2C7006A0C08 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 7L9S67WMDX;
+						DevelopmentTeam = 58C5326KUC;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
@@ -480,7 +480,7 @@
 			baseConfigurationReference = D91525C8FDA98C0B81D9F58F /* Pods-Stocks.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 7L9S67WMDX;
+				DEVELOPMENT_TEAM = 58C5326KUC;
 				INFOPLIST_FILE = Stocks/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -497,7 +497,7 @@
 			baseConfigurationReference = 508120402DCA671589ECD8BF /* Pods-Stocks.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 7L9S67WMDX;
+				DEVELOPMENT_TEAM = 58C5326KUC;
 				INFOPLIST_FILE = Stocks/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

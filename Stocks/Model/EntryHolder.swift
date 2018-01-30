@@ -17,3 +17,4 @@ struct EntryHolder<Entry> {
     
     private(set) var lastSet: Date?
 }
+

@@ -24,6 +24,8 @@ class PriceChartViewController: UIViewController {
             chart.noDataText = NSLocalizedString("Error retrieving chart.", comment: "")
             chart.noDataFont = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
             
+            chart.xAxis.avoidFirstLastClippingEnabled = false
+        
             chart.xAxis.valueFormatter = DateValueFormatter()
             chart.xAxis.labelCount = Constants.Chart.dateLabelCount
             chart.xAxis.labelPosition = .bottom
@@ -43,13 +45,43 @@ class PriceChartViewController: UIViewController {
         
         if let lastSet = stock.historicalPrices.lastSet?.timeIntervalSinceNow, lastSet > (-Constants.Stock.articlesValidFor) {
             for price in stock.historicalPrices.entries {
-                data[price.date] = price.open
+                if price.high > 0 {
+                let calendar = Calendar.current
+                
+                var dateComponents: DateComponents? = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: price.date)
+                
+                dateComponents?.hour = Int(price.minute.components(separatedBy: ":")[0])
+                dateComponents?.minute = Int(price.minute.components(separatedBy: ":")[1])
+                
+                if let date: Date = calendar.date(from: dateComponents!) {
+                    self.data[date] = price.high
+                }
+            }
             }
         }
         else {
             requestToken?.cancel()
             spinner?.startAnimating()
-            
+
+            if stock.stockExchange == "CURRENCY" {
+                requestToken = stockQueryService.getDailyPricesCoin(forSymbol: stock.symbol) { [weak self] result in
+                    self?.spinner.stopAnimating()
+                    
+                    switch result {
+                    case Result.Success(let newDailyPrices):
+                        stock.historicalCoinPrices.entries = newDailyPrices.Data
+                        
+                        for price in newDailyPrices.Data {
+                            if price.high > 0 {
+        
+                                self?.data[price.time] = price.high
+                            }
+                        }
+                    case Result.Failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+            } else {
             requestToken = stockQueryService.getDailyPrices(forSymbol: stock.symbol) { [weak self] result in
                 self?.spinner.stopAnimating()
                 
@@ -58,11 +90,23 @@ class PriceChartViewController: UIViewController {
                     stock.historicalPrices.entries = newDailyPrices
                     
                     for price in newDailyPrices {
-                        self?.data[price.date] = price.open
+                        if price.high > 0 {
+                        let calendar = Calendar.current
+                        
+                        var dateComponents: DateComponents? = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: price.date)
+                        
+                
+                        dateComponents?.hour = Int(price.minute.components(separatedBy: ":")[0])
+                        dateComponents?.minute = Int(price.minute.components(separatedBy: ":")[1])
+                        
+                        let date: Date? = calendar.date(from: dateComponents!)
+                        self?.data[date!] = price.high
+                        }
                     }
                 case Result.Failure(let error):
                     print(error.localizedDescription)
                 }
+            }
             }
         }
     }
@@ -93,6 +137,7 @@ class PriceChartViewController: UIViewController {
                 )
             }()
             
+            
             let line = LineChartDataSet(values: lineChartEntry, label: nil)
             line.colors = [.black]
             line.drawCirclesEnabled = false
@@ -114,8 +159,8 @@ class PriceChartViewController: UIViewController {
 class DateValueFormatter: NSObject, IAxisValueFormatter {
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         let formater = DateFormatter()
-        formater.dateStyle = .short
-        formater.timeStyle = .none
+        formater.dateStyle = .none
+        formater.timeStyle = .short
         
         return formater.string(from: Date(timeIntervalSince1970: value))
     }
